@@ -206,4 +206,3 @@ SELECT * FROM c WHERE c.customerId = 'CUST001' AND c.type = 'salesOrder'
 - [Cosmos DB Partitioning Docs](https://aka.ms/cosmos-hierarchical-partitioning)
 - [Request Units (RU) Explained](https://learn.microsoft.com/en-us/azure/cosmos-db/request-units)
 - [Scaling Best Practices](https://learn.microsoft.com/en-us/azure/cosmos-db/scaling-provisioned-throughput-best-practices)
-
