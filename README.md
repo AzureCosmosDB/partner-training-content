@@ -1,33 +1,84 @@
-# Project
+# Azure Cosmos DB Training Guide
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This README provides step-by-step instructions for delivering the Azure Cosmos DB training sessions and hands-on labs. The total duration of the training is approximately 6 hours and 15 minutes.
 
-As the maintainer of this project, please make a few updates:
+---
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## 1. Kickoff & Azure Cosmos DB Overview (45 minutes)
 
-## Contributing
+- Refer to the `./Kickoff & Overview` folder.
+- Present the slide and embed the videos mentioned in the slide.
+- Ensure the session stays within the 45-minute duration to maintain the schedule.
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit [Contributor License Agreements](https://cla.opensource.microsoft.com).
+---
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+## 2. Hands-on Lab 1: Environment Setup (45 minutes)
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+- Refer to `./Lab-3/banking-workshop/lab1.md`.
+- Follow the instructions to guide participants through the environment setup.
+- Allocate 45 minutes for this lab.
 
-## Trademarks
+---
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+## 3. Data Modelling & Optimization Session (90 minutes)
+
+- Refer to `./Modeling & Optimization/Cosmos DB Data Modeling & Optimization.pptx`.
+- Present the slide deck thoroughly.
+- This is a lengthy and insightful session that builds the foundation for Azure Cosmos DB.
+- Allocate 90 minutes for this session.
+
+---
+
+## 4. Hands-on Lab 2: Data Modelling & Querying (60 minutes)
+
+- Refer to `./Modeling & Optimization/Modelling & Optimization lab.md`.
+- Help the audience try out the lab exercises.
+- Allocate 1 hour for this lab.
+
+---
+
+## 5. Developing AI Agents with Azure Cosmos DB (45 minutes)
+
+- Refer to `./Lab-3/CosmosDBForAI.pptx`.
+- Present the session with detailed insights into Cosmos DB's support for AI.
+- Allocate 45 minutes for this session.
+
+---
+
+## 6. Hands-on Lab 3: AI-Powered Search (45 minutes)
+
+- Refer to `./Lab-3/banking-workshop/lab3.md`.
+- Guide participants through the lab exercises.
+- Allocate 45 minutes for this lab.
+
+---
+
+## 7. Security & Cost Optimisation Session (45 minutes)
+
+- Refer to `./Security/Azure CosmosDB Security.pptx`.
+- Present the session focusing on security aspects and cost optimization.
+- Allocate 45 minutes for this session.
+
+---
+
+## 8. Hands-on Lab 4: Security & Cost Optimisation Techniques (45 minutes)
+
+- Refer to `./Security/SecurityHOL.md`.
+- Help participants try out the security and cost optimization techniques.
+- Allocate 45 minutes for this lab.
+
+---
+
+## 9. Latest Updates in Azure Cosmos DB + Wrap-up (15 minutes)
+
+- Refer to the content available in the respective folder.
+- Present the latest updates and wrap up the training.
+- Allocate 15 minutes for this final session.
+
+---
+
+## Notes
+
+- Ensure each session starts and ends on time to avoid delays.
+- Encourage participant engagement during hands-on labs.
+- Provide support and clarification as needed throughout the training.
