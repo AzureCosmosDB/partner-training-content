@@ -4,6 +4,18 @@ This README provides step-by-step instructions for delivering the Azure Cosmos D
 
 ---
 
+## Prerequisites
+
+- Laptop or workstation with **administrator rights**
+- Azure subscription with **owner rights**
+- Subscription access to Azure OpenAI service. Start here to [Request Access to Azure OpenAI Service](https://aka.ms/oaiapply). If you have access, see below for ensuring enough quota to deploy.
+-    - [Git](https://git-scm.com/downloads). If you don't have Git, download the ZIP file directly from the GitHub repository and unzip it to a local folder.
+- For hands on labs:
+   - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
+   - [Python 3.12+](https://www.python.org/downloads/)
+   - To build and run the frontend component, you need to install [Node.js](https://nodejs.org/en/download/) and [Angular CLI](https://angular.dev/installation#install-angular-cli)
+   - (Optional) Any Python IDE or [VS Code](https://code.visualstudio.com/Download) with the [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+
 ## 1. Kickoff & Azure Cosmos DB Overview (45 minutes)
 
 - Refer to the `./Kickoff & Overview` folder.
@@ -14,7 +26,7 @@ This README provides step-by-step instructions for delivering the Azure Cosmos D
 
 ## 2. Hands-on Lab 1: Environment Setup (45 minutes)
 
-- Refer to `./Lab-3/banking-workshop/lab1.md`.
+- Refer to `./AI_Agent_Lab/banking-workshop/part1.md`.
 - Follow the instructions to guide participants through the environment setup.
 - Allocate 45 minutes for this lab.
 
@@ -39,7 +51,7 @@ This README provides step-by-step instructions for delivering the Azure Cosmos D
 
 ## 5. Developing AI Agents with Azure Cosmos DB (45 minutes)
 
-- Refer to `./Lab-3/CosmosDBForAI.pptx`.
+- Refer to `./AI_Agent_Lab/CosmosDBForAI.pptx`.
 - Present the session with detailed insights into Cosmos DB's support for AI.
 - Allocate 45 minutes for this session.
 
@@ -47,7 +59,7 @@ This README provides step-by-step instructions for delivering the Azure Cosmos D
 
 ## 6. Hands-on Lab 3: AI-Powered Search (45 minutes)
 
-- Refer to `./Lab-3/banking-workshop/lab3.md`.
+- Refer to `./AI_Agent_Lab/banking-workshop/part2.md`.
 - Guide participants through the lab exercises.
 - Allocate 45 minutes for this lab.
 

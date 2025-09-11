@@ -1,6 +1,6 @@
 # Lab 3 - Multi-Agent Banking Application
 
-> Make sure you have completed [lab 1](lab1.md) and have the environment set up.
+> Make sure you have completed [part 1](part1.md) and have the environment set up.
 
 ## Start the agent service
 
