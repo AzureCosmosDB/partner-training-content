@@ -2,9 +2,9 @@
 
 Join us for a full-day Azure Cosmos DB Hands-on Workshop designed to equip you with the skills to build scalable, high-performance, and cost-optimised applications. This workshop blends technical deep dives with guided labs covering data modelling, full text and vector search, and real-world cost optimisation strategies. You'll also explore the latest innovations in Cosmos DB, including its integration with Microsoft Fabric. Ideal for developers, architects, and data professionals looking to deepen their expertise with Cosmos DB.
 
-- 📅 **Date:** [Insert Date]
-- 🕤 **Time:** 9:30 AM – 5:00 PM (IST)
-- 📍 **Location:** [Insert Venue or Online Link]
+- 📅 **PST:** 29-Oct-2025, 9:30 AM – 5:00 PM (PST)
+- 🕤 **IST:** 31-Oct-2025, 9:30 AM – 5:00 PM (IST)
+- 📍 **Location:** [[Teams Link to join, Common for both TZ]](https://aka.ms/cdbtrainingjoininfo)
 - 🎯 **Audience:** Technical Architects, Developers, Data Engineers, and AI Practitioners
 - 🧠 **Prerequisites:** Basic familiarity with NoSQL and Azure Portal
 
