@@ -1,0 +1,62 @@
+[
+  {
+    "id": "CAT001",
+    "type": "category",
+    "name": "Electronics",
+    "description": "Electronic devices and gadgets"
+  },
+  {
+    "id": "CAT002",
+    "type": "category",
+    "name": "Books",
+    "description": "Books and educational materials"
+  },
+  {
+    "id": "CAT003",
+    "type": "category",
+    "name": "Clothing",
+    "description": "Apparel and fashion items"
+  },
+  {
+    "id": "TAG001",
+    "type": "tag",
+    "name": "Smartphone",
+    "description": "Mobile phone devices"
+  },
+  {
+    "id": "TAG002",
+    "type": "tag",
+    "name": "Apple",
+    "description": "Apple brand products"
+  },
+  {
+    "id": "TAG003",
+    "type": "tag",
+    "name": "Tablet",
+    "description": "Tablet computing devices"
+  },
+  {
+    "id": "TAG004",
+    "type": "tag",
+    "name": "Laptop",
+    "description": "Portable computers"
+  },
+  {
+    "id": "TAG005",
+    "type": "tag",
+    "name": "Technology",
+    "description": "Technology-related content"
+  },
+  {
+    "id": "TAG006",
+    "type": "tag",
+    "name": "Cloud",
+    "description": "Cloud computing topics"
+  },
+  {
+    "id": "TAG007",
+    "type": "tag",
+    "name": "Database",
+    "description": "Database technologies"
+  }
+]
