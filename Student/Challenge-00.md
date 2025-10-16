@@ -112,7 +112,7 @@ The deployment will create:
 
 ```bash
 cd Lab-3/banking-workshop/infra
-azd init 
+azd up 
 ```
 ### Validate deployment
 ```bash
