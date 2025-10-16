@@ -75,12 +75,12 @@ Your developer environment is ready, hooray! Skip to section: [Deploy Azure Reso
 
 If you want to setup your environment on your local workstation, expand the section below and follow the requirements listed. 
 
-Git
-Azure Developer CLI (azd)
-Python 3.12+
-Node.js
-Angular CLI
-VS Code with Python Extension
+- [Git](https://git-scm.com/downloads)
+  - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
+  - [Python 3.12+](https://www.python.org/downloads/)
+  - [Node.js](https://nodejs.org/en/download/)
+  - [Angular CLI](https://angular.dev/installation#install-angular-cli)
+  - [VS Code](https://code.visualstudio.com/Download) with [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 
 <details markdown=1>
 <summary markdown="span">Click to expand/collapse Local Workstation Requirements</summary>
@@ -134,7 +134,7 @@ To complete this challenge successfully, you should:
 - Have verified Azure OpenAI quota availability:
   - GPT-4o: 30K tokens per minute minimum
   - text-embedding-3-small: 5K tokens per minute minimum
-- Have installed all required development tools:
+- If you decided to install locally rather than use GitHub Codespaces, make sure you have installed all required development tools:
   - [Git](https://git-scm.com/downloads)
   - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
   - [Python 3.12+](https://www.python.org/downloads/)

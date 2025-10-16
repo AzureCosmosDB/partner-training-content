@@ -1,108 +1,145 @@
-# Challenge 03 - AI-Powered Search with Vector Embeddings
+# Challenge 03 - Security & Cost Optimization
 
-**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-04.md)**
+**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)**
 
 ## Introduction
 
-Modern applications increasingly require intelligent search capabilities that go beyond simple text matching. In this challenge, you'll build AI-powered agents that can understand natural language queries and provide relevant responses using Azure Cosmos DB's vector search capabilities combined with traditional full-text search.
+Running Azure Cosmos DB in production requires careful attention to both security and cost optimization. In this final challenge, you'll implement security best practices, configure monitoring and alerting, and apply cost optimization techniques to ensure your Cosmos DB deployment is both secure and cost-effective.
 
-You'll work with a multi-agent banking application that demonstrates how to implement different types of search patterns: full-text search for exact matches, vector search for semantic similarity, and hybrid search that combines both approaches.
+Security in the cloud is a shared responsibility, and Cosmos DB provides multiple layers of protection. Cost optimization requires understanding how different configuration choices impact your monthly bill and implementing strategies to minimize unnecessary spending.
 
 ## Description
 
-Building on your deployed banking application from Challenge 01, you'll now explore and extend its AI capabilities. The application includes multiple specialized agents (coordinator, customer support, transactions, and sales) that work together to handle different types of banking queries.
+Using your existing banking application infrastructure, you'll enhance it with production-ready security controls and implement cost optimization strategies. You'll configure monitoring, set up alerts, test different throughput models, and apply security best practices.
 
-Your task is to understand how these agents use Azure Cosmos DB for different search scenarios and then implement your own enhancements to demonstrate vector search capabilities.
-
-The agents are designed to:
-- Handle natural language queries about banking services
-- Transfer conversations between specialized agents based on context
-- Perform vector searches on banking offers and product information
-- Execute transactions while maintaining conversational context
+This challenge simulates real-world scenarios where you need to balance performance, security, and cost while maintaining a great user experience.
 
 ## Success Criteria
 
 To complete this challenge successfully, you should:
 
-### Part 1: Start and Explore the Banking Application
+### Part 1: Monitoring and Performance Analysis
 
-- Start the backend API service from your deployed banking application
-- Install dependencies and activate the Python virtual environment
-- Start the frontend Angular application on `http://localhost:4200`
-- Verify that you can create a new chat session and receive responses from the AI agents
+- **Enable Comprehensive Monitoring:**
+  - Navigate to your Cosmos DB account's \"Insights\" section
+  - Enable diagnostic logging and send logs to Log Analytics
+  - Monitor RU consumption, latency, and throttling events
 
-### Part 2: Test Agent Coordination and Transaction Processing
+- **Create Test Workload and Measure Performance:**
+  - Create a new container named `TransactionTest` with `/customerId` as partition key
+  - Set initial throughput to 400 RU/s (manual mode)
+  - Insert 1000+ sample transaction documents using the provided schema
+  - Run different query patterns and record RU consumption:
+    - Point read by transaction ID
+    - Range query by customer ID
+    - Cross-partition query by transaction category
+    - Aggregation query (count transactions by category)
 
-- Create a new conversation and test money transfer functionality:
-  - Send message: \"I want to transfer money\"
-  - Provide transfer details: \"I want to transfer 500 from Acc001 to Acc003\"
-  - Confirm the transaction when prompted
-  - Verify the transaction was processed by checking the `AccountsData` container in Azure portal
-- Demonstrate that the conversation is properly transferred between different agents based on the query type
+### Part 2: Autoscale Configuration and Testing
 
-### Part 3: Test Vector Search for Banking Offers
+- **Switch to Autoscale:**
+  - Change your container's throughput from manual to autoscale
+  - Set maximum RU/s to 4000
+  - Document the configuration change process
 
-- Create a new conversation to test product search capabilities:
-  - Send message: \"Tell me about your banking offers\"
-  - Follow up with: \"credit card\"
-  - Observe how the sales agent uses vector search to find relevant offers
-  - Document which container and search method is being used for offer recommendations
+- **Simulate Variable Workload:**
+  - Create a script or use Data Explorer to simulate high-load scenarios
+  - Run batch inserts and concurrent queries to trigger autoscaling
+  - Monitor how RU/s adjusts automatically in the Insights dashboard
+  - Record the scaling behavior and timing
 
-### Part 4: API Testing with Swagger
+- **Cost Analysis:**
+  - Use the Azure Cosmos DB Capacity Calculator to estimate costs
+  - Compare estimated monthly costs for manual vs autoscale configurations
+  - Document scenarios where each approach would be more cost-effective
 
-- Access the Swagger UI at `http://localhost:63280/docs`
-- Test the API endpoints directly:
-  - Create a new session using provided tenant/user combinations (e.g., Contoso/Mark)
-  - Send a completion request with \"Hello there!\" message
-  - Capture and analyze the JSON response structure
-  - Document the token usage and response patterns
+### Part 3: Security Implementation
 
-### Part 5: Analyze and Understand the AI Architecture
+- **Configure Role-Based Access Control (RBAC):**
+  - Navigate to \"Access control (IAM)\" in your Cosmos DB account
+  - Create or assign the following roles:
+    - \"Cosmos DB Operator\" for administrative access
+    - \"Cosmos DB Built-in Data Reader\" for read-only access
+    - \"Cosmos DB Built-in Data Contributor\" for read-write access
+  - Test access with different role assignments
 
-- **Vector Search Analysis:**
-  - Identify which Azure Cosmos DB containers store vector embeddings
-  - Understand how product offers are vectorized and searched
-  - Explain the difference between exact text matching and semantic similarity search
+- **Network Security:**
+  - Configure firewall rules to restrict access by IP address
+  - Review private endpoint configuration options (document the process even if not implementing)
+  - Understand the difference between public and private access
 
-- **Agent Coordination:**
-  - Document how the coordinator agent determines which specialized agent to route queries to
-  - Explain how conversation context is maintained across agent transfers
-  - Identify where conversation history is stored in Cosmos DB
+- **Encryption and Data Protection:**
+  - Verify that encryption at rest is enabled (default setting)
+  - Review customer-managed key options in the Encryption settings
+  - Document the encryption capabilities and configuration options
 
-- **Performance Monitoring:**
-  - Monitor RU consumption during vector search operations
-  - Compare RU costs between simple queries and vector similarity searches
-  - Analyze query execution times for different search patterns
+### Part 4: Alerting and Cost Management
+
+- **Configure Monitoring Alerts:**
+  - Create an alert rule for high RU consumption (threshold: > 3000 RU/s for 5 minutes)
+  - Set up notifications via email or SMS
+  - Create an alert for throttling events
+  - Test that alerts trigger properly during high-load scenarios
+
+- **Implement Cost Optimization Best Practices:**
+  - Review and optimize indexing policies (exclude rarely-queried properties)
+  - Configure Time-to-Live (TTL) on appropriate containers to auto-delete old data
+  - Implement efficient query patterns that avoid cross-partition operations
+  - Document recommended query optimization techniques
+
+### Part 5: Advanced Security and Optimization Analysis
+
+- **Security Assessment:**
+  - Document all security features currently enabled
+  - Identify additional security measures for a production environment
+  - Explain the security benefits of managed identity integration
+  - Review audit logging capabilities
+
+- **Cost Optimization Report:**
+  - Create a report comparing different throughput strategies
+  - Analyze the cost impact of different partition key choices
+  - Document best practices for minimizing RU consumption
+  - Provide recommendations for ongoing cost management
 
 ## Learning Resources
 
-- [Vector Search in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/vector-search)
-- [Azure OpenAI Embeddings](https://docs.microsoft.com/azure/cognitive-services/openai/concepts/embeddings)
-- [Building Multi-Agent Systems](https://docs.microsoft.com/azure/cognitive-services/openai/concepts/advanced-usage)
-- [Hybrid Search Patterns](https://docs.microsoft.com/azure/search/hybrid-search-overview)
+- [Security in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/database-security)
+- [Cost optimization in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/plan-manage-costs)
+- [Monitoring Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/monitor-cosmos-db)
+- [Autoscale in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/provision-throughput-autoscale)
+- [Azure Cosmos DB pricing](https://azure.microsoft.com/pricing/details/cosmos-db/)
 
 ## Tips
 
-- Use the browser's developer tools to monitor network requests and understand the API calls
-- Check the Azure portal's Cosmos DB Data Explorer to see how data is structured
-- Pay attention to the different types of messages stored in the Chat and ChatHistory containers
-- The Debug container contains useful information about agent decisions and search operations
-- Vector searches typically consume more RUs than simple queries - monitor this in the portal
-- Each agent has specialized prompts that determine their behavior and capabilities
+- Use the Azure Pricing Calculator to model different scenarios before implementing changes
+- Monitor costs closely during testing to avoid unexpected charges
+- Autoscale is most beneficial for workloads with unpredictable traffic patterns
+- Cross-partition queries can be expensive - always include partition key in filters when possible
+- TTL can significantly reduce storage costs by automatically cleaning up old data
+- Network restrictions should be tested carefully to avoid blocking legitimate access
 
 ## Advanced Challenges (Optional)
 
-- **Custom Vector Search:** Implement your own vector search functionality for a new type of banking product
-- **Search Optimization:** Experiment with different similarity thresholds and measure their impact on search relevance
-- **Multi-modal Search:** Enhance the search to combine text vectors with other data types (dates, amounts, categories)
-- **Performance Tuning:** Implement caching strategies for frequently accessed vectors to reduce RU consumption
-- **Advanced Agents:** Create a new specialized agent that handles investment or insurance products
+- **Multi-Region Setup:** Configure global distribution and analyze the cost implications
+- **Backup and Restore:** Test backup configurations and restore procedures
+- **Advanced Monitoring:** Create custom dashboards and KQL queries for operational insights
+- **Performance Benchmarking:** Use tools like Azure Cosmos DB Emulator to benchmark different configurations
+- **Compliance Configuration:** Research and document compliance features (GDPR, HIPAA, etc.)
 
 ## Troubleshooting
 
-- If the frontend doesn't start, ensure Node.js and Angular CLI are properly installed
-- If the API returns errors, check that your Azure OpenAI service is running and has sufficient quota
-- If vector searches aren't working, verify that the embedding model deployment is successful
-- Monitor Azure costs during testing as AI services can accumulate charges quickly
+- If autoscale doesn't trigger, ensure you're generating sufficient load consistently
+- Monitor the Azure Service Health dashboard for any service issues
+- Check that RBAC roles are properly assigned if access issues occur
+- Verify firewall rules if connection problems arise
+- Use the Activity Log to troubleshoot configuration changes
 
-**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-04.md)**
+## Clean Up
+
+After completing this challenge:
+- Delete any test containers created during the exercises
+- Review and clean up any unnecessary alert rules
+- Consider preserving the main banking application for future reference
+- Document lessons learned and best practices discovered
+
+**[< Previous Challenge](./Challenge-03.md)** - **[Home](../README.md)**

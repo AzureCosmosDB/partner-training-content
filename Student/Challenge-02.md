@@ -1,98 +1,108 @@
-# Challenge 02 - Data Modeling & Query Optimization
+# Challenge 02 - AI-Powered Search with Vector Embeddings
 
 **[< Previous Challenge](./Challenge-01.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-03.md)**
 
 ## Introduction
 
-Understanding how to properly model data in Azure Cosmos DB is crucial for building high-performance, cost-effective applications. In this challenge, you'll learn how partition key choices, indexing policies, and query patterns dramatically impact both performance and cost.
+Modern applications increasingly require intelligent search capabilities that go beyond simple text matching. In this challenge, you'll build AI-powered agents that can understand natural language queries and provide relevant responses using Azure Cosmos DB's vector search capabilities combined with traditional full-text search.
 
-Unlike relational databases, NoSQL databases like Cosmos DB require you to think differently about data modeling. You need to model your data based on how you plan to query it, not just on the relationships between entities.
+You'll work with a multi-agent banking application that demonstrates how to implement different types of search patterns: full-text search for exact matches, vector search for semantic similarity, and hybrid search that combines both approaches.
 
 ## Description
 
-You'll work with an e-commerce dataset containing customers, products, categories, tags, and sales orders. Through hands-on experimentation, you'll discover how different modeling decisions affect Request Unit (RU) consumption and query performance.
+Building on your deployed banking application from Challenge 01, you'll now explore and extend its AI capabilities. The application includes multiple specialized agents (coordinator, customer support, transactions, and sales) that work together to handle different types of banking queries.
 
-The goal is to understand the trade-offs between different partition key strategies and indexing policies by measuring actual RU consumption and latency for various query patterns.
+Your task is to understand how these agents use Azure Cosmos DB for different search scenarios and then implement your own enhancements to demonstrate vector search capabilities.
 
-You can find sample data documents in the `Challenge02/` folder of the Resources.zip file provided by your coach.
+The agents are designed to:
+- Handle natural language queries about banking services
+- Transfer conversations between specialized agents based on context
+- Perform vector searches on banking offers and product information
+- Execute transactions while maintaining conversational context
 
 ## Success Criteria
 
 To complete this challenge successfully, you should:
 
-### Part 1: Container Design Experiments
+### Part 1: Start and Explore the Banking Application
 
-- **Experiment A: Customers & Sales Orders Container**
-  - Create a container named `customers` with `/id` as partition key
-  - Insert customer and sales order documents (use provided sample data)
-  - Run queries to retrieve a customer by ID and all sales orders for a customer
-  - Record RU consumption and latency
-  - Recreate the container with `/customerId` as partition key and repeat
-  - Compare the results and explain the differences
+- Start the backend API service from your deployed banking application
+- Install dependencies and activate the Python virtual environment
+- Start the frontend Angular application on `http://localhost:4200`
+- Verify that you can create a new chat session and receive responses from the AI agents
 
-- **Experiment B: Products Container**
-  - Create a container named `products` with `/categoryId` as partition key
-  - Insert product documents (use provided sample data)
-  - Run queries to list all products in a category and retrieve a product by ID
-  - Record RU consumption and latency
-  - Recreate the container with `/id` as partition key and repeat
-  - Compare the results and identify which approach works better for each query type
+### Part 2: Test Agent Coordination and Transaction Processing
 
-- **Experiment C: Product Metadata Container**
-  - Create a container named `productMeta` with `/type` as partition key
-  - Insert category and tag documents (use provided sample data)
-  - Query all categories: `SELECT * FROM c WHERE c.type = 'category'`
-  - Query all tags: `SELECT * FROM c WHERE c.type = 'tag'`
-  - Record RU consumption and explain why this partition key choice works well
+- Create a new conversation and test money transfer functionality:
+  - Send message: \"I want to transfer money\"
+  - Provide transfer details: \"I want to transfer 500 from Acc001 to Acc003\"
+  - Confirm the transaction when prompted
+  - Verify the transaction was processed by checking the `AccountsData` container in Azure portal
+- Demonstrate that the conversation is properly transferred between different agents based on the query type
 
-### Part 2: Indexing Policy Experiments
+### Part 3: Test Vector Search for Banking Offers
 
-- Modify the indexing policy on one of your containers to exclude certain properties
-- Run queries that both include and exclude those properties from the WHERE clause
-- Measure the impact on RU consumption and performance
-- Document your findings on when to include vs exclude properties from indexing
+- Create a new conversation to test product search capabilities:
+  - Send message: \"Tell me about your banking offers\"
+  - Follow up with: \"credit card\"
+  - Observe how the sales agent uses vector search to find relevant offers
+  - Document which container and search method is being used for offer recommendations
 
-### Part 3: Query Pattern Analysis
+### Part 4: API Testing with Swagger
 
-- Create a table documenting RU charges and latency for different query types:
-  - **Point Read:** Retrieve by ID with partition key
-  - **Range Query:** Query multiple items within a partition
-  - **Cross-Partition Query:** Query without partition key filter
-  - **Aggregation Query:** Count or sum across partitions
+- Access the Swagger UI at `http://localhost:63280/docs`
+- Test the API endpoints directly:
+  - Create a new session using provided tenant/user combinations (e.g., Contoso/Mark)
+  - Send a completion request with \"Hello there!\" message
+  - Capture and analyze the JSON response structure
+  - Document the token usage and response patterns
 
-- Run at least one example of each query type and record the results
-- Identify which queries are most expensive and why
+### Part 5: Analyze and Understand the AI Architecture
 
-### Part 4: Analysis & Recommendations
+- **Vector Search Analysis:**
+  - Identify which Azure Cosmos DB containers store vector embeddings
+  - Understand how product offers are vectorized and searched
+  - Explain the difference between exact text matching and semantic similarity search
 
-- Document your findings and provide recommendations:
-  - Which partition key strategy worked best for each container and why?
-  - How did indexing changes affect performance and cost?
-  - What anti-patterns did you observe (hot partitions, expensive cross-partition queries)?
-  - What denormalization or data embedding strategies would you recommend?
+- **Agent Coordination:**
+  - Document how the coordinator agent determines which specialized agent to route queries to
+  - Explain how conversation context is maintained across agent transfers
+  - Identify where conversation history is stored in Cosmos DB
+
+- **Performance Monitoring:**
+  - Monitor RU consumption during vector search operations
+  - Compare RU costs between simple queries and vector similarity searches
+  - Analyze query execution times for different search patterns
 
 ## Learning Resources
 
-- [Partitioning in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/partitioning-overview)
-- [Request Units in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/request-units)
-- [Indexing in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/index-overview)
-- [Data modeling in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/modeling-data)
-- [Query performance guidelines](https://docs.microsoft.com/azure/cosmos-db/sql-query-performance-guidelines)
+- [Vector Search in Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/vector-search)
+- [Azure OpenAI Embeddings](https://docs.microsoft.com/azure/cognitive-services/openai/concepts/embeddings)
+- [Building Multi-Agent Systems](https://docs.microsoft.com/azure/cognitive-services/openai/concepts/advanced-usage)
+- [Hybrid Search Patterns](https://docs.microsoft.com/azure/search/hybrid-search-overview)
 
 ## Tips
 
-- Use the Azure portal's Data Explorer to run queries and see RU consumption
-- Pay attention to the \"Request Charge\" value shown after each query
-- Cross-partition queries are expensive - try to avoid them when possible
-- Consider embedding related data when you frequently query them together
-- Hot partitions occur when most traffic goes to a few partition key values
-- Use the query execution statistics to understand performance bottlenecks
+- Use the browser's developer tools to monitor network requests and understand the API calls
+- Check the Azure portal's Cosmos DB Data Explorer to see how data is structured
+- Pay attention to the different types of messages stored in the Chat and ChatHistory containers
+- The Debug container contains useful information about agent decisions and search operations
+- Vector searches typically consume more RUs than simple queries - monitor this in the portal
+- Each agent has specialized prompts that determine their behavior and capabilities
 
 ## Advanced Challenges (Optional)
 
-- Implement hierarchical partition keys and compare with single-level partitioning
-- Experiment with composite indexes for complex query patterns
-- Use the Cosmos DB bulk executor to load larger datasets and observe behavior at scale
-- Set up analytical store and compare query performance for analytical workloads
+- **Custom Vector Search:** Implement your own vector search functionality for a new type of banking product
+- **Search Optimization:** Experiment with different similarity thresholds and measure their impact on search relevance
+- **Multi-modal Search:** Enhance the search to combine text vectors with other data types (dates, amounts, categories)
+- **Performance Tuning:** Implement caching strategies for frequently accessed vectors to reduce RU consumption
+- **Advanced Agents:** Create a new specialized agent that handles investment or insurance products
 
-**[< Previous Challenge](./Challenge-01.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-03.md)**
+## Troubleshooting
+
+- If the frontend doesn't start, ensure Node.js and Angular CLI are properly installed
+- If the API returns errors, check that your Azure OpenAI service is running and has sufficient quota
+- If vector searches aren't working, verify that the embedding model deployment is successful
+- Monitor Azure costs during testing as AI services can accumulate charges quickly
+
+**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-04.md)**
