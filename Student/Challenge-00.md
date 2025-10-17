@@ -117,7 +117,7 @@ The deployment will create:
 First, install dependencies. If you are using GitHub Codespaces:
 
 ```bash
-cd backend
+cd Student/Resources/banking-workshop/backend
 
 python -m venv .venv
 source .venv/bin/activate
