@@ -114,16 +114,12 @@ The deployment will create:
 cd Lab-3/banking-workshop/infra
 azd up 
 ```
-### Validate deployment
+
+Start the Frontend Application
+
 ```bash
-# List created resources
-az resource list --resource-group <resource-group-name> --output table
-
-# Check Cosmos DB account
-az cosmosdb list --output table
-
-# Check OpenAI deployment
-az cognitiveservices account deployment list --name <openai-account-name> --resource-group <resource-group-name>
+npm install
+npm start
 ```
 ## Success Criteria
 
