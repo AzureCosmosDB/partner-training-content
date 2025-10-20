@@ -24,40 +24,7 @@ The agents are designed to:
 
 To complete this challenge successfully, you should:
 
-### Part 1: Start and Explore the Banking Application
-
-- Start the backend API service from your deployed banking application
-- Install dependencies and activate the Python virtual environment
-- Start the frontend Angular application on `http://localhost:4200`
-- Verify that you can create a new chat session and receive responses from the AI agents
-
-### Part 2: Test Agent Coordination and Transaction Processing
-
-- Create a new conversation and test money transfer functionality:
-  - Send message: \"I want to transfer money\"
-  - Provide transfer details: \"I want to transfer 500 from Acc001 to Acc003\"
-  - Confirm the transaction when prompted
-  - Verify the transaction was processed by checking the `AccountsData` container in Azure portal
-- Demonstrate that the conversation is properly transferred between different agents based on the query type
-
-### Part 3: Test Vector Search for Banking Offers
-
-- Create a new conversation to test product search capabilities:
-  - Send message: \"Tell me about your banking offers\"
-  - Follow up with: \"credit card\"
-  - Observe how the sales agent uses vector search to find relevant offers
-  - Document which container and search method is being used for offer recommendations
-
-### Part 4: API Testing with Swagger
-
-- Access the Swagger UI at `http://localhost:63280/docs`
-- Test the API endpoints directly:
-  - Create a new session using provided tenant/user combinations (e.g., Contoso/Mark)
-  - Send a completion request with \"Hello there!\" message
-  - Capture and analyze the JSON response structure
-  - Document the token usage and response patterns
-
-### Part 5: Analyze and Understand the AI Architecture
+### Analyze and Understand the AI Architecture
 
 - **Vector Search Analysis:**
   - Identify which Azure Cosmos DB containers store vector embeddings

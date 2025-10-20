@@ -25,14 +25,12 @@ In this hack you will learn how to:
 This hack has the following challenges:
 
 - Challenge 00: **[Prerequisites - Ready, Set, GO!](Student/Challenge-00.md)**
-   - Prepare your development environment and Azure subscription
-- Challenge 01: **[Environment Setup & First Steps](Student/Challenge-01.md)**
-   - Provision Cosmos DB accounts, configure basics, and validate connectivity  
-- Challenge 02: **[Data Modeling & Query Optimization](Student/Challenge-02.md)**
+   - Prepare your development environment, Azure subscription, provision Cosmos DB accounts, configure basics, and validate connectivity
+- Challenge 01: **[Data Modeling & Query Optimization](Student/Challenge-01.md)**
    - Design partitioned data models, write efficient queries, and analyze performance
-- Challenge 03: **[AI-Powered Search with Vector Embeddings](Student/Challenge-03.md)**
+- Challenge 02: **[AI-Powered Search with Vector Embeddings](Student/Challenge-02.md)**
    - Build AI agents with full-text, vector, and hybrid search capabilities
-- Challenge 04: **[Security & Cost Optimization](Student/Challenge-04.md)**
+- Challenge 03: **[Security & Cost Optimization](Student/Challenge-03.md)**
    - Implement security best practices and cost-saving strategies
 
 ## Prerequisites
@@ -40,7 +38,7 @@ This hack has the following challenges:
 Before starting this hack, you should have:
 
 - **Technical Skills:**
-  - Basic familiarity with NoSQL databases and Azure Portal
+  - Basic familiarity with NoSQL databases and the Azure Portal
   - Understanding of REST APIs and JSON
   - Experience with at least one programming language (Python, C#, Node.js)
   - Basic knowledge of cloud computing concepts
@@ -49,14 +47,6 @@ Before starting this hack, you should have:
   - Azure subscription with **Owner** rights
   - Access to Azure OpenAI service ([Request Access](https://aka.ms/oaiapply))
   - Sufficient Azure OpenAI quota (30K tokens/min for GPT-4o, 5K tokens/min for text-embedding-3-small)
-
-- **Development Environment:**
-  - Laptop/workstation with administrator rights
-  - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
-  - [Git](https://git-scm.com/downloads)
-  - [Python 3.12+](https://www.python.org/downloads/)
-  - [Node.js](https://nodejs.org/en/download/) and [Angular CLI](https://angular.dev/installation)
-  - [VS Code](https://code.visualstudio.com/Download) (recommended)
 
 ## Repository Contents
 

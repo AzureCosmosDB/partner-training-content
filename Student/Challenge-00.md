@@ -353,6 +353,11 @@ To complete this challenge successfully, you should:
 - Can successfully run `azd version` and see output
 - Can successfully run `az login` and authenticate to Azure
 - Can list your Azure subscriptions using `az account list`
+- Did you start and explore the Banking Application successfully?  
+- Did you start a new chat session and receive responses from the AI agents? 
+- Did you demonstrate that the conversation is properly transferred between different agents based on the query type?
+- Did you test vector search for banking offers? 
+- Did you use the Swagger UI at `http://localhost:63280/docs` to test the endpoints directly?
 
 ## Learning Resources
 
