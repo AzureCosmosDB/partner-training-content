@@ -1,14 +1,10 @@
-{
-    "/api": {
-      "target": "http://localhost:63280",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization"
-      }
-    }
+[
+  {
+    "context": ["/tenant/**", "/api/**"],
+    "target": "http://127.0.0.1:63280",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
+]
   

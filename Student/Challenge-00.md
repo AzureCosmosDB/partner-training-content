@@ -111,6 +111,23 @@ The deployment will create:
 - Pre-seeded sample data for the banking application
 
 **NOTE:** All resources will be automatically configured with proper security settings and RBAC permissions. This includes a managed identity that will have access to both Cosmos DB and Azure OpenAI services.
+## Deploy Azure Services
+
+Log in with your Azure credentials using the Azure Developer CLI (`azd`):
+
+   ```shell
+   azd auth login
+   ```
+
+Deploy the Azure services using `azd up`:
+
+   ```shell
+   azd up
+   ```
+
+When prompted for the environment name, enter: `workshop`.
+
+Use the default selections for the Azure subscription and region.
 
 ## Start the agent service
 
