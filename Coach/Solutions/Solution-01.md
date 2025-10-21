@@ -1,5 +1,7 @@
 # Challenge 01 - Environment Setup & First Steps - Coach's Guide
 
+**[< Previous Challenge](./Solution-00.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-02.md)**
+
 ## Solution Overview
 
 This challenge deploys the complete banking application infrastructure using Azure Developer CLI. The deployment creates Azure Cosmos DB, Azure OpenAI, and supporting services with proper security configurations.

@@ -1,5 +1,7 @@
 # Challenge 04 - Security & Cost Optimization - Coach's Guide
 
+**[< Previous Challenge](./Solution-03.md)** - **[Home](../../README.md)**
+
 ## Solution Overview
 
 This final challenge focuses on production readiness by implementing security best practices and cost optimization strategies. Teams will configure monitoring, implement security controls, and apply techniques to minimize operational costs while maintaining performance.

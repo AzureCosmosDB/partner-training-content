@@ -1,5 +1,7 @@
 # Challenge 00 - Prerequisites - Coach's Guide
 
+**[Home](../../README.md)** - **[Next Challenge >](./Solution-01.md)**
+
 ## Solution Overview
 
 This challenge ensures all participants have the necessary tools, permissions, and access to complete the subsequent challenges successfully. As a coach, you should verify that each team has completed all prerequisites before moving to Challenge 01.

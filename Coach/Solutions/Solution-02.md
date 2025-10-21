@@ -1,5 +1,7 @@
 # Challenge 02 - Data Modeling & Query Optimization - Coach's Guide
 
+**[< Previous Challenge](./Solution-01.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-03.md)**
+
 ## Solution Overview
 
 This challenge teaches fundamental Cosmos DB concepts through hands-on experimentation with different partition key strategies and indexing policies. Teams will learn by measuring actual RU consumption and performance differences.
