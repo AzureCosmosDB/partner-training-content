@@ -14,7 +14,7 @@ You'll work with an e-commerce dataset containing customers, products, categorie
 
 The goal is to understand the trade-offs between different partition key strategies and indexing policies by measuring actual RU consumption and latency for various query patterns.
 
-You can find sample data documents in the `Challenge02/` folder of the Resources.zip file provided by your coach.
+You can find sample data documents in the `Challenge01/` folder of the under the `/Student/Resources` folder. 
 
 ## Success Criteria
 
@@ -23,24 +23,24 @@ To complete this challenge successfully, you should:
 ### Part 1: Container Design Experiments
 
 - **Experiment A: Customers & Sales Orders Container**
-  - Create a container named `customers` with `/id` as partition key
-  - Insert customer and sales order documents (use provided sample data)
+  - Create a container named `customers` with `/id` as the partition key
+  - Insert customer and sales order documents (use the provided sample data)
   - Run queries to retrieve a customer by ID and all sales orders for a customer
   - Record RU consumption and latency
-  - Recreate the container with `/customerId` as partition key and repeat
+  - Recreate the container with `/customerId` as the partition key and repeat
   - Compare the results and explain the differences
 
 - **Experiment B: Products Container**
-  - Create a container named `products` with `/categoryId` as partition key
-  - Insert product documents (use provided sample data)
+  - Create a container named `products` with `/categoryId` as the partition key
+  - Insert product documents (use the provided sample data)
   - Run queries to list all products in a category and retrieve a product by ID
   - Record RU consumption and latency
-  - Recreate the container with `/id` as partition key and repeat
+  - Recreate the container with `/id` as the partition key and repeat
   - Compare the results and identify which approach works better for each query type
 
 - **Experiment C: Product Metadata Container**
-  - Create a container named `productMeta` with `/type` as partition key
-  - Insert category and tag documents (use provided sample data)
+  - Create a container named `productMeta` with `/type` as the partition key
+  - Insert category and tag documents (use the provided sample data)
   - Query all categories: `SELECT * FROM c WHERE c.type = 'category'`
   - Query all tags: `SELECT * FROM c WHERE c.type = 'tag'`
   - Record RU consumption and explain why this partition key choice works well
