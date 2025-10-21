@@ -1,219 +1,295 @@
-# Challenge 01 - Environment Setup & First Steps - Coach's Guide
+# Challenge 02 - Data Modeling & Query Optimization - Coach's Guide
 
-**[< Previous Challenge](./Solution-00.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-02.md)**
+**[< Previous Challenge](./Solution-00a.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-02.md)**
 
 ## Solution Overview
 
-This challenge deploys the complete banking application infrastructure using Azure Developer CLI. The deployment creates Azure Cosmos DB, Azure OpenAI, and supporting services with proper security configurations.
+This challenge teaches fundamental Cosmos DB concepts through hands-on experimentation with different partition key strategies and indexing policies. Teams will learn by measuring actual RU consumption and performance differences.
 
-## Expected Deployment Components
+## Learning Objectives for Students
 
-### Azure Resources Created
-1. **Azure Cosmos DB Account**
-   - SQL API with multiple containers
-   - Global distribution (single region initially)
-   - Configured with proper indexing policies
+- Understand how partition key choice affects query performance and cost
+- Learn the difference between hot and distributed partitions
+- Experience the impact of indexing policies on RU consumption
+- Practice NoSQL data modeling principles
+- Develop skills in performance analysis and optimization
 
-2. **Azure OpenAI Service**
-   - GPT-4o model deployment (30K TPM)
-   - text-embedding-3-small model deployment (5K TPM)
+## Pre-Challenge Setup for Coaches
 
-3. **User-Assigned Managed Identity**
-   - Cosmos DB Data Contributor role
-   - Cognitive Services OpenAI User role
+### Sample Data Files
+Ensure teams have access to sample e-commerce data files in their Resources.zip:
+- `customers.json` - Customer records
+- `products.json` - Product catalog
+- `categories.json` - Product categories
+- `tags.json` - Product tags
+- `orders.json` - Sales order data
 
-4. **Supporting Infrastructure**
-   - Resource group
-   - Application Insights (if configured)
-   - Storage account (for application logs)
+### Expected Container Configurations
 
-### Cosmos DB Containers Created
-- `OffersData` - Banking product offers with vector embeddings
-- `AccountsData` - Customer account information
-- `Users` - Customer profile data
-- `Chat` - Real-time chat messages
-- `ChatHistory` - Conversation history
-- `Checkpoints` - Application state management
-- `Debug` - Debugging and diagnostic information
+#### Container A: customers
+- **Purpose:** Store customer and sales order data together
+- **Partition Key Options:**
+  1. `/id` - Each document gets its own partition
+  2. `/customerId` - Customer and their orders share partitions
 
-## Detailed Solution Steps
+#### Container B: products  
+- **Purpose:** Store product catalog data
+- **Partition Key Options:**
+  1. `/categoryId` - Products grouped by category
+  2. `/id` - Each product gets its own partition
 
-### Step 1: Initial Setup Verification
-```bash
-# Verify authentication
-azd auth login
-az login
+#### Container C: productMeta
+- **Purpose:** Store categories and tags
+- **Partition Key:** `/type` - Groups by document type
 
-# Verify subscription access
-az account list
-az account show
+## Detailed Solution Guide
+
+### Part 1: Container Design Experiments
+
+#### Experiment A: Customers & Sales Orders
+
+**Option 1: Partition Key = `/id`**
+```json
+// Expected behavior:
+// - Point reads are very efficient (1-2 RUs)
+// - Cross-partition queries for customer orders are expensive (10+ RUs)
+// - Good partition distribution but poor query performance
 ```
 
-### Step 2: Clone and Navigate to Application
-```bash
-# If not already done in Challenge 00
-git clone https://github.com/abhirockzz/banking-workshop/
-cd banking-workshop
+**Option 2: Partition Key = `/customerId`**
+```json
+// Expected behavior:
+// - Point reads by customer ID are efficient (2-3 RUs)
+// - Customer order queries are very efficient (3-5 RUs)
+// - Better query performance but potential hot partitions for active customers
 ```
 
-### Step 3: Deploy Infrastructure
-```bash
-# Initialize and deploy
-azd up
+**Coaching Points:**
+- Show teams how to view RU consumption in Data Explorer
+- Explain that `/customerId` is better for this access pattern
+- Discuss hot partition risks with high-volume customers
 
-# When prompted:
-# Environment name: workshop (or team-specific name)
-# Subscription: Select the appropriate subscription
-# Region: Select closest region with OpenAI availability
+#### Experiment B: Products
+
+**Option 1: Partition Key = `/categoryId`**
+```json
+// Expected behavior:
+// - Category browsing queries are very efficient (3-5 RUs)
+// - Point reads by product ID require cross-partition query (5-10 RUs)
+// - Good for e-commerce browsing patterns
 ```
 
-### Step 4: Deployment Validation
-```bash
-# List created resources
-az resource list --resource-group <resource-group-name> --output table
-
-# Check Cosmos DB account
-az cosmosdb list --output table
-
-# Check OpenAI deployment
-az cognitiveservices account deployment list --name <openai-account-name> --resource-group <resource-group-name>
+**Option 2: Partition Key = `/id`**
+```json
+// Expected behavior:
+// - Point reads by product ID are very efficient (1-2 RUs)
+// - Category browsing requires cross-partition query (15+ RUs)
+// - Good for direct product access, poor for browsing
 ```
 
-## Common Issues and Solutions
+**Coaching Points:**
+- Help teams understand the access pattern trade-offs
+- Explain when each approach is appropriate
+- Show how query patterns drive partition key decisions
 
-### 1. Azure OpenAI Quota Exceeded
-**Symptoms:** Deployment fails with quota errors
+#### Experiment C: Product Metadata
+
+**Partition Key = `/type`**
+```json
+// Expected behavior:
+// - Listing all categories is efficient (2-4 RUs)
+// - Listing all tags is efficient (2-4 RUs)
+// - Simple queries with good partition alignment
+```
+
+**Coaching Points:**
+- Demonstrate how low-cardinality partition keys work
+- Explain when this pattern is appropriate
+- Show the efficiency of aligned queries
+
+### Part 2: Indexing Policy Experiments
+
+#### Default Indexing Policy
+```json
+{
+  "indexingMode": "consistent",
+  "automatic": true,
+  "includedPaths": [
+    {
+      "path": "/*"
+    }
+  ],
+  "excludedPaths": [
+    {
+      "path": "/\"_etag\"/?"}
+  ]
+}
+```
+
+#### Optimized Indexing Policy Example
+```json
+{
+  "indexingMode": "consistent",
+  "automatic": true,
+  "includedPaths": [
+    {
+      "path": "/customerId/?"
+    },
+    {
+      "path": "/categoryId/?"
+    },
+    {
+      "path": "/price/?"
+    }
+  ],
+  "excludedPaths": [
+    {
+      "path": "/*"
+    },
+    {
+      "path": "/description/?"
+    },
+    {
+      "path": "/largeData/?"
+    }
+  ]
+}
+```
+
+**Expected Results:**
+- Queries using indexed properties: Lower RU consumption
+- Queries using excluded properties: Higher RU consumption or failures
+- Write operations: Slightly lower RU consumption with selective indexing
+
+### Part 3: Query Pattern Analysis
+
+#### Sample Queries and Expected RU Consumption
+
+**Point Read (Best Case)**
+```sql
+SELECT * FROM c WHERE c.id = \"CUST001\" AND c.customerId = \"CUST001\"
+-- Expected: 1-2 RUs (includes partition key)
+```
+
+**Range Query (Good Case)**
+```sql
+SELECT * FROM c WHERE c.customerId = \"CUST001\" AND c.type = \"salesOrder\"
+-- Expected: 3-5 RUs (within partition)
+```
+
+**Cross-Partition Query (Expensive)**
+```sql
+SELECT * FROM c WHERE c.category = \"Electronics\"
+-- Expected: 10-50+ RUs (depends on data size)
+```
+
+**Aggregation Query (Most Expensive)**
+```sql
+SELECT c.customerId, COUNT(1) as orderCount FROM c WHERE c.type = \"salesOrder\" GROUP BY c.customerId
+-- Expected: 20-100+ RUs (cross-partition aggregation)
+```
+
+## Common Coaching Challenges
+
+### 1. Students Don't Understand RU Consumption
+**Problem:** Teams focus only on query results, not performance metrics
 **Solutions:**
-- Check current quota usage: Portal > Cognitive Services > Quotas
-- Request quota increase (may take time)
-- Consider reducing model capacity in deployment
-- Share OpenAI resources across teams
+- Always show the \"Request Charge\" in Data Explorer
+- Explain that RUs directly translate to cost
+- Create a cost comparison table during experiments
 
-### 2. Insufficient Permissions
-**Symptoms:** RBAC assignment failures
+### 2. Confusion About Partition Keys
+**Problem:** Teams try to use relational database thinking
 **Solutions:**
-- Verify user has Owner or User Access Administrator role
-- Check subscription-level permissions
-- Try deploying to a resource group where user has appropriate access
+- Emphasize \"query-driven design\"
+- Show concrete examples of hot vs cold partitions
+- Explain that denormalization is normal in NoSQL
 
-### 3. Resource Naming Conflicts
-**Symptoms:** Resources with duplicate names
+### 3. Indexing Policy Complexity
+**Problem:** Teams get overwhelmed by indexing options
 **Solutions:**
-- Use unique environment names per team
-- Add team identifier to environment name
-- Delete existing resources if redeploying
+- Start with simple include/exclude examples
+- Show the impact on write performance
+- Focus on commonly queried properties
 
-### 4. Region Availability Issues
-**Symptoms:** Services not available in selected region
+### 4. Not Seeing Performance Differences
+**Problem:** With small datasets, differences aren't obvious
 **Solutions:**
-- Choose regions with both Cosmos DB and OpenAI availability
-- Consider: East US, West Europe, Southeast Asia
-- Check Azure service availability by region
+- Use bulk operations to amplify differences
+- Explain how patterns scale with data volume
+- Show theoretical scaling examples
 
-## Coaching Points
+## Expected Results Summary
 
-### During Deployment (10-15 minutes)
-- Explain what each service does while deployment runs
-- Show the Azure portal and navigate to created resources
-- Discuss the benefits of Infrastructure as Code (IaC)
-- Explain managed identity and RBAC concepts
-
-### Post-Deployment Verification
-1. **Azure Portal Navigation**
-   - Show participants how to find their resource group
-   - Navigate to Cosmos DB Data Explorer
-   - Explore container structure and sample data
-
-2. **Cost Monitoring Setup**
-   - Show Cost Management + Billing
-   - Set up spending alerts if not already configured
-   - Explain RU consumption concepts
-
-3. **Security Review**
-   - Show managed identity in the portal
-   - Review RBAC assignments
-   - Explain network access configurations
-
-## Validation Checklist
-
-### Resources Created ✓
-- [ ] Resource group exists
-- [ ] Cosmos DB account is running
-- [ ] OpenAI service is deployed
-- [ ] Managed identity is created
-- [ ] RBAC roles are assigned
-
-### Cosmos DB Validation ✓
-- [ ] Database contains expected containers
-- [ ] Sample data is loaded in containers
-- [ ] Can query data using Data Explorer
-- [ ] Throughput is configured appropriately
-
-### OpenAI Validation ✓
-- [ ] Model deployments are successful
-- [ ] Models show \"Running\" status
-- [ ] Quota consumption is within limits
-
-## Troubleshooting Commands
-
-```bash
-# Check deployment status
-azd env list
-azd env show
-
-# View deployment logs
-azd deploy --debug
-
-# Check resource group contents
-az group show --name <resource-group-name>
-az resource list --resource-group <resource-group-name>
-
-# Cosmos DB specific checks
-az cosmosdb show --name <cosmosdb-name> --resource-group <resource-group-name>
-az cosmosdb sql database list --account-name <cosmosdb-name> --resource-group <resource-group-name>
-
-# OpenAI specific checks
-az cognitiveservices account show --name <openai-name> --resource-group <resource-group-name>
-```
+| Container | Partition Key | Query Type | Expected RU | Notes |
+|-----------|---------------|------------|-------------|--------|
+| customers | /id | Point Read | 1-2 RUs | Efficient |
+| customers | /id | Customer Orders | 10-20 RUs | Cross-partition |
+| customers | /customerId | Point Read | 2-3 RUs | Good |
+| customers | /customerId | Customer Orders | 3-5 RUs | Very efficient |
+| products | /categoryId | Category Browse | 3-5 RUs | Excellent |
+| products | /categoryId | Product Detail | 5-10 RUs | Cross-partition |
+| products | /id | Product Detail | 1-2 RUs | Excellent |
+| products | /id | Category Browse | 15-30 RUs | Cross-partition |
+| productMeta | /type | List Categories | 2-4 RUs | Efficient |
+| productMeta | /type | List Tags | 2-4 RUs | Efficient |
 
 ## Time Management
 
-- **Expected Duration:** 45-60 minutes
-- **Deployment Time:** 10-15 minutes
-- **Validation Time:** 15-20 minutes
-- **Troubleshooting Buffer:** 10-20 minutes
+- **Total Duration:** 90-120 minutes
+- **Setup:** 15 minutes
+- **Experiments:** 60 minutes
+- **Analysis:** 30 minutes
+- **Discussion:** 15 minutes
 
-## Advanced Coaching Topics (if time permits)
+## Key Teaching Moments
 
-### Infrastructure as Code Discussion
-- Explain the benefits of azd and Bicep templates
-- Show how to customize deployments
-- Discuss version control for infrastructure
+### 1. Partition Key Selection Strategy
+- Always start with query patterns
+- Consider data distribution and hotspots
+- Think about scale and growth patterns
 
-### Security Deep Dive
-- Explain managed identity vs service principals
-- Discuss network isolation options
-- Review encryption at rest and in transit
+### 2. NoSQL vs SQL Mindset Shift
+- Denormalization is normal and beneficial
+- Optimize for reads, not writes
+- Accept some data duplication for performance
 
-### Cost Optimization Preview
-- Show current cost estimates in portal
-- Explain autoscale vs manual throughput
-- Discuss spending alerts and budgets
+### 3. Cost vs Performance Trade-offs
+- Show actual cost implications of different designs
+- Explain operational vs capital expenses
+- Discuss business impact of query performance
 
-## Success Criteria Validation
+## Advanced Topics (if time permits)
 
-A team has successfully completed this challenge when:
-1. ✅ All Azure resources are deployed and running
-2. ✅ Cosmos DB contains all expected containers with sample data
-3. ✅ OpenAI models are successfully deployed and accessible
-4. ✅ Team can navigate Azure portal and find their resources
-5. ✅ Basic queries work in Cosmos DB Data Explorer
-6. ✅ No deployment errors or warnings remain
+### Hierarchical Partition Keys
+- Explain multi-level partitioning
+- Show examples: `/tenantId/customerId`
+- Discuss when to use composite keys
+
+### Analytical Store
+- Compare OLTP vs OLAP query patterns
+- Show when to use analytical store
+- Explain cost implications
+
+### Change Feed
+- Demonstrate real-time data processing
+- Show integration patterns
+- Explain scaling considerations
+
+## Success Validation
+
+Teams successfully complete when they can:
+1. ✅ Explain why different partition keys perform differently
+2. ✅ Show measured RU differences between query patterns
+3. ✅ Identify which partition key is best for each scenario
+4. ✅ Understand the impact of indexing on performance and cost
+5. ✅ Articulate when to use cross-partition queries
+6. ✅ Apply NoSQL modeling principles to new scenarios
 
 ## Preparation for Next Challenge
 
-Before moving to Challenge 02:
-- Ensure teams understand their resource group structure
-- Verify they can access Cosmos DB Data Explorer
-- Confirm they understand basic RU consumption concepts
-- Make sure they know how to monitor costs
+Before moving to Challenge 03:
+- Ensure teams understand vector search concepts
+- Explain how AI workloads differ from traditional queries
+- Preview how embeddings work with partition keys
+- Set expectations for Challenge 03 complexity

@@ -1,295 +1,355 @@
-# Challenge 02 - Data Modeling & Query Optimization - Coach's Guide
+# Challenge 03 - AI-Powered Search with Vector Embeddings - Coach's Guide
 
 **[< Previous Challenge](./Solution-01.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-03.md)**
 
 ## Solution Overview
 
-This challenge teaches fundamental Cosmos DB concepts through hands-on experimentation with different partition key strategies and indexing policies. Teams will learn by measuring actual RU consumption and performance differences.
+This challenge demonstrates how to build AI-powered applications using Azure Cosmos DB's vector search capabilities. Teams will explore a multi-agent banking system that combines traditional queries with AI-powered semantic search.
 
 ## Learning Objectives for Students
 
-- Understand how partition key choice affects query performance and cost
-- Learn the difference between hot and distributed partitions
-- Experience the impact of indexing policies on RU consumption
-- Practice NoSQL data modeling principles
-- Develop skills in performance analysis and optimization
+- Understand vector embeddings and semantic similarity search
+- Learn how to combine traditional and AI-powered search patterns
+- Experience multi-agent system architectures
+- Practice with Azure OpenAI integration patterns
+- Analyze the performance characteristics of vector searches
 
-## Pre-Challenge Setup for Coaches
+## Application Architecture Overview
 
-### Sample Data Files
-Ensure teams have access to sample e-commerce data files in their Resources.zip:
-- `customers.json` - Customer records
-- `products.json` - Product catalog
-- `categories.json` - Product categories
-- `tags.json` - Product tags
-- `orders.json` - Sales order data
+### Multi-Agent System Components
 
-### Expected Container Configurations
+1. **Coordinator Agent** (`coordinator_agent.prompty`)
+   - Routes conversations to appropriate specialized agents
+   - Maintains conversation context and state
+   - Handles agent transitions and handoffs
 
-#### Container A: customers
-- **Purpose:** Store customer and sales order data together
-- **Partition Key Options:**
-  1. `/id` - Each document gets its own partition
-  2. `/customerId` - Customer and their orders share partitions
+2. **Customer Support Agent** (`customer_support_agent.prompty`)
+   - Handles general inquiries and account information
+   - Accesses customer data and transaction history
+   - Provides account balance and status information
 
-#### Container B: products  
-- **Purpose:** Store product catalog data
-- **Partition Key Options:**
-  1. `/categoryId` - Products grouped by category
-  2. `/id` - Each product gets its own partition
+3. **Transactions Agent** (`transactions_agent.prompty`)
+   - Processes money transfers and transactions
+   - Validates account balances and limits
+   - Updates account records in real-time
 
-#### Container C: productMeta
-- **Purpose:** Store categories and tags
-- **Partition Key:** `/type` - Groups by document type
+4. **Sales Agent** (`sales_agent.prompty`)
+   - Handles product inquiries and recommendations
+   - Uses vector search for banking offer recommendations
+   - Provides personalized product suggestions
+
+### Data Flow Architecture
+
+```
+User Query → Coordinator Agent → Specialized Agent → Cosmos DB + OpenAI → Response
+```
 
 ## Detailed Solution Guide
 
-### Part 1: Container Design Experiments
+### Part 1: Application Startup and Testing
 
-#### Experiment A: Customers & Sales Orders
+#### Backend Service Startup
+```bash
+cd backend
 
-**Option 1: Partition Key = `/id`**
-```json
-// Expected behavior:
-// - Point reads are very efficient (1-2 RUs)
-// - Cross-partition queries for customer orders are expensive (10+ RUs)
-// - Good partition distribution but poor query performance
-```
+# Linux/macOS
+python -m venv .venv
+source .venv/bin/activate
 
-**Option 2: Partition Key = `/customerId`**
-```json
-// Expected behavior:
-// - Point reads by customer ID are efficient (2-3 RUs)
-// - Customer order queries are very efficient (3-5 RUs)
-// - Better query performance but potential hot partitions for active customers
-```
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
 
-**Coaching Points:**
-- Show teams how to view RU consumption in Data Explorer
-- Explain that `/customerId` is better for this access pattern
-- Discuss hot partition risks with high-volume customers
-
-#### Experiment B: Products
-
-**Option 1: Partition Key = `/categoryId`**
-```json
-// Expected behavior:
-// - Category browsing queries are very efficient (3-5 RUs)
-// - Point reads by product ID require cross-partition query (5-10 RUs)
-// - Good for e-commerce browsing patterns
-```
-
-**Option 2: Partition Key = `/id`**
-```json
-// Expected behavior:
-// - Point reads by product ID are very efficient (1-2 RUs)
-// - Category browsing requires cross-partition query (15+ RUs)
-// - Good for direct product access, poor for browsing
-```
-
-**Coaching Points:**
-- Help teams understand the access pattern trade-offs
-- Explain when each approach is appropriate
-- Show how query patterns drive partition key decisions
-
-#### Experiment C: Product Metadata
-
-**Partition Key = `/type`**
-```json
-// Expected behavior:
-// - Listing all categories is efficient (2-4 RUs)
-// - Listing all tags is efficient (2-4 RUs)
-// - Simple queries with good partition alignment
-```
-
-**Coaching Points:**
-- Demonstrate how low-cardinality partition keys work
-- Explain when this pattern is appropriate
-- Show the efficiency of aligned queries
-
-### Part 2: Indexing Policy Experiments
-
-#### Default Indexing Policy
-```json
-{
-  "indexingMode": "consistent",
-  "automatic": true,
-  "includedPaths": [
-    {
-      "path": "/*"
-    }
-  ],
-  "excludedPaths": [
-    {
-      "path": "/\"_etag\"/?"}
-  ]
-}
-```
-
-#### Optimized Indexing Policy Example
-```json
-{
-  "indexingMode": "consistent",
-  "automatic": true,
-  "includedPaths": [
-    {
-      "path": "/customerId/?"
-    },
-    {
-      "path": "/categoryId/?"
-    },
-    {
-      "path": "/price/?"
-    }
-  ],
-  "excludedPaths": [
-    {
-      "path": "/*"
-    },
-    {
-      "path": "/description/?"
-    },
-    {
-      "path": "/largeData/?"
-    }
-  ]
-}
+pip install -r src/app/requirements.txt
 ```
 
 **Expected Results:**
-- Queries using indexed properties: Lower RU consumption
-- Queries using excluded properties: Higher RU consumption or failures
-- Write operations: Slightly lower RU consumption with selective indexing
+- Virtual environment created successfully
+- All dependencies installed without errors
+- Python service ready to start
 
-### Part 3: Query Pattern Analysis
-
-#### Sample Queries and Expected RU Consumption
-
-**Point Read (Best Case)**
-```sql
-SELECT * FROM c WHERE c.id = \"CUST001\" AND c.customerId = \"CUST001\"
--- Expected: 1-2 RUs (includes partition key)
+#### Frontend Application Startup
+```bash
+cd frontend
+npm install
+ng serve --proxy-config proxy.conf.json
 ```
 
-**Range Query (Good Case)**
-```sql
-SELECT * FROM c WHERE c.customerId = \"CUST001\" AND c.type = \"salesOrder\"
--- Expected: 3-5 RUs (within partition)
+**Expected Results:**
+- Angular application builds successfully
+- Frontend accessible at `http://localhost:4200`
+- Proxy configuration routes API calls to backend
+
+### Part 2: Agent Coordination Testing
+
+#### Money Transfer Scenario
+**User Input:** \"I want to transfer money\"
+**Expected Flow:**
+1. Coordinator Agent receives request
+2. Identifies transaction intent
+3. Routes to Transactions Agent
+4. Transactions Agent requests transfer details
+5. User provides: \"500 from Acc001 to Acc003\"
+6. Agent validates accounts and balances
+7. Executes transfer and updates Cosmos DB
+8. Confirms transaction completion
+
+**Technical Implementation:**
+```python
+# Example transaction processing logic
+def process_transfer(from_account, to_account, amount):
+    # Validate accounts exist and have sufficient balance
+    # Update account balances atomically
+    # Record transaction history
+    # Return confirmation details
 ```
 
-**Cross-Partition Query (Expensive)**
-```sql
-SELECT * FROM c WHERE c.category = \"Electronics\"
--- Expected: 10-50+ RUs (depends on data size)
+**Validation Steps for Teams:**
+1. Check conversation flow in browser
+2. Verify agent handoff occurs correctly
+3. Confirm transaction is recorded in Cosmos DB
+4. Validate account balances are updated
+
+### Part 3: Vector Search Testing
+
+#### Banking Offers Scenario
+**User Input:** \"Tell me about your banking offers\"
+**Expected Flow:**
+1. Coordinator Agent identifies product inquiry
+2. Routes to Sales Agent
+3. Sales Agent performs vector search on offers
+4. Returns relevant banking products
+5. User refines with \"credit card\"
+6. Agent provides specific credit card offers
+
+**Vector Search Implementation:**
+```python
+# Example vector search logic
+def search_offers(query_text, similarity_threshold=0.7):
+    # Generate embedding for user query
+    embedding = openai_client.embeddings.create(
+        input=query_text,
+        model=\"text-embedding-3-small\"
+    )
+    
+    # Perform vector search in Cosmos DB
+    results = cosmos_client.query_items(
+        query=\"SELECT * FROM c WHERE VectorDistance(c.embedding, @embedding) > @threshold\",
+        parameters=[
+            {\"name\": \"@embedding\", \"value\": embedding.data[0].embedding},
+            {\"name\": \"@threshold\", \"value\": similarity_threshold}
+        ]
+    )
+    return results
 ```
 
-**Aggregation Query (Most Expensive)**
-```sql
-SELECT c.customerId, COUNT(1) as orderCount FROM c WHERE c.type = \"salesOrder\" GROUP BY c.customerId
--- Expected: 20-100+ RUs (cross-partition aggregation)
+### Part 4: API Testing with Swagger
+
+#### Direct API Testing
+**Swagger URL:** `http://localhost:63280/docs`
+
+**Sample Test Flow:**
+1. **Create Session:**
+   ```json
+   POST /api/sessions
+   {
+     \"tenantId\": \"Contoso\",
+     \"userId\": \"Mark\"
+   }
+   ```
+
+2. **Send Message:**
+   ```json
+   POST /api/completions
+   {
+     \"tenantId\": \"Contoso\",
+     \"userId\": \"Mark\",
+     \"sessionId\": \"<session-id>\",
+     \"message\": \"Hello there!\"
+   }
+   ```
+
+**Expected Response Structure:**
+```json
+[
+  {
+    \"id\": \"<message-id>\",
+    \"type\": \"ai_response\",
+    \"sessionId\": \"<session-id>\",
+    \"sender\": \"User\",
+    \"text\": \"Hello there!\",
+    \"tokensUsed\": 0
+  },
+  {
+    \"id\": \"<response-id>\",
+    \"type\": \"ai_response\",
+    \"sessionId\": \"<session-id>\",
+    \"sender\": \"Coordinator\",
+    \"text\": \"Hi there! Welcome to our bank...\",
+    \"tokensUsed\": 265
+  }
+]
 ```
 
 ## Common Coaching Challenges
 
-### 1. Students Don't Understand RU Consumption
-**Problem:** Teams focus only on query results, not performance metrics
+### 1. Vector Search Concept Confusion
+**Problem:** Teams don't understand how semantic similarity works
 **Solutions:**
-- Always show the \"Request Charge\" in Data Explorer
-- Explain that RUs directly translate to cost
-- Create a cost comparison table during experiments
+- Use concrete examples: \"credit card\" vs \"rewards program\"
+- Show embedding visualization tools
+- Explain cosine similarity in simple terms
+- Demonstrate with similar vs dissimilar queries
 
-### 2. Confusion About Partition Keys
-**Problem:** Teams try to use relational database thinking
+### 2. Agent Handoff Not Working
+**Problem:** Coordinator doesn't route to correct agents
 **Solutions:**
-- Emphasize \"query-driven design\"
-- Show concrete examples of hot vs cold partitions
-- Explain that denormalization is normal in NoSQL
+- Check agent prompt templates for clarity
+- Verify Azure OpenAI model is responding correctly
+- Look at conversation logs in Debug container
+- Ensure proper context is maintained
 
-### 3. Indexing Policy Complexity
-**Problem:** Teams get overwhelmed by indexing options
+### 3. High RU Consumption
+**Problem:** Vector searches consume many RUs
 **Solutions:**
-- Start with simple include/exclude examples
-- Show the impact on write performance
-- Focus on commonly queried properties
+- Explain that vector searches are computationally expensive
+- Show RU monitoring in Azure portal
+- Discuss optimization strategies (caching, indexing)
+- Compare with traditional query costs
 
-### 4. Not Seeing Performance Differences
-**Problem:** With small datasets, differences aren't obvious
+### 4. Application Startup Issues
+**Problem:** Frontend or backend won't start
 **Solutions:**
-- Use bulk operations to amplify differences
-- Explain how patterns scale with data volume
-- Show theoretical scaling examples
+- Check Node.js and Python versions
+- Verify port availability (4200, 63280)
+- Review dependency installation logs
+- Ensure Azure services are running
 
-## Expected Results Summary
+## Performance Analysis Guide
 
-| Container | Partition Key | Query Type | Expected RU | Notes |
-|-----------|---------------|------------|-------------|--------|
-| customers | /id | Point Read | 1-2 RUs | Efficient |
-| customers | /id | Customer Orders | 10-20 RUs | Cross-partition |
-| customers | /customerId | Point Read | 2-3 RUs | Good |
-| customers | /customerId | Customer Orders | 3-5 RUs | Very efficient |
-| products | /categoryId | Category Browse | 3-5 RUs | Excellent |
-| products | /categoryId | Product Detail | 5-10 RUs | Cross-partition |
-| products | /id | Product Detail | 1-2 RUs | Excellent |
-| products | /id | Category Browse | 15-30 RUs | Cross-partition |
-| productMeta | /type | List Categories | 2-4 RUs | Efficient |
-| productMeta | /type | List Tags | 2-4 RUs | Efficient |
+### RU Consumption Patterns
+
+**Traditional Queries:**
+- Point reads: 1-3 RUs
+- Range queries: 3-10 RUs
+- Cross-partition queries: 10-50 RUs
+
+**Vector Searches:**
+- Simple vector query: 15-30 RUs
+- Vector query with filters: 20-40 RUs
+- Hybrid search (vector + text): 25-50 RUs
+
+### Token Usage Monitoring
+
+**Typical Token Consumption:**
+- Simple queries: 50-200 tokens
+- Complex conversations: 300-800 tokens
+- Vector search with context: 200-500 tokens
+
+**Coaching Points:**
+- Show token usage in API responses
+- Explain cost implications of token consumption
+- Discuss optimization strategies
+
+## Advanced Coaching Topics
+
+### 1. Multi-Agent Architecture Patterns
+- Explain agent specialization benefits
+- Show how to design agent boundaries
+- Discuss conversation state management
+- Demonstrate error handling and recovery
+
+### 2. Vector Search Optimization
+- Explain embedding model selection
+- Discuss similarity threshold tuning
+- Show hybrid search implementation
+- Cover vector index optimization
+
+### 3. Real-World Scaling Considerations
+- Discuss conversation state partitioning
+- Explain agent load balancing
+- Cover multi-tenant isolation
+- Address security and compliance
+
+## Troubleshooting Guide
+
+### Application Issues
+```bash
+# Check backend service
+curl http://localhost:63280/health
+
+# Check frontend build
+ng build --configuration development
+
+# Review application logs
+docker logs <container-name>
+```
+
+### Azure Service Issues
+```bash
+# Check OpenAI deployment status
+az cognitiveservices account deployment list
+
+# Check Cosmos DB connectivity
+az cosmosdb sql database list
+
+# Monitor RU consumption
+# Use Azure portal Insights section
+```
+
+### Vector Search Issues
+```python
+# Test embedding generation
+from openai import AzureOpenAI
+client = AzureOpenAI(...)
+response = client.embeddings.create(
+    input=\"test query\",
+    model=\"text-embedding-3-small\"
+)
+print(response.data[0].embedding[:5])  # First 5 dimensions
+```
 
 ## Time Management
 
 - **Total Duration:** 90-120 minutes
-- **Setup:** 15 minutes
-- **Experiments:** 60 minutes
-- **Analysis:** 30 minutes
-- **Discussion:** 15 minutes
-
-## Key Teaching Moments
-
-### 1. Partition Key Selection Strategy
-- Always start with query patterns
-- Consider data distribution and hotspots
-- Think about scale and growth patterns
-
-### 2. NoSQL vs SQL Mindset Shift
-- Denormalization is normal and beneficial
-- Optimize for reads, not writes
-- Accept some data duplication for performance
-
-### 3. Cost vs Performance Trade-offs
-- Show actual cost implications of different designs
-- Explain operational vs capital expenses
-- Discuss business impact of query performance
-
-## Advanced Topics (if time permits)
-
-### Hierarchical Partition Keys
-- Explain multi-level partitioning
-- Show examples: `/tenantId/customerId`
-- Discuss when to use composite keys
-
-### Analytical Store
-- Compare OLTP vs OLAP query patterns
-- Show when to use analytical store
-- Explain cost implications
-
-### Change Feed
-- Demonstrate real-time data processing
-- Show integration patterns
-- Explain scaling considerations
+- **Application Setup:** 20 minutes
+- **Basic Testing:** 30 minutes
+- **Vector Search Exploration:** 40 minutes
+- **API Testing:** 20 minutes
+- **Analysis and Discussion:** 10 minutes
 
 ## Success Validation
 
 Teams successfully complete when they can:
-1. ✅ Explain why different partition keys perform differently
-2. ✅ Show measured RU differences between query patterns
-3. ✅ Identify which partition key is best for each scenario
-4. ✅ Understand the impact of indexing on performance and cost
-5. ✅ Articulate when to use cross-partition queries
-6. ✅ Apply NoSQL modeling principles to new scenarios
+1. ✅ Start both frontend and backend applications
+2. ✅ Demonstrate successful money transfer with agent coordination
+3. ✅ Show vector search working for banking offers
+4. ✅ Use Swagger API to test endpoints directly
+5. ✅ Explain the difference between traditional and vector searches
+6. ✅ Monitor and understand RU consumption patterns
+7. ✅ Articulate how agent coordination works
+
+## Key Teaching Moments
+
+### 1. AI Integration Patterns
+- Show how traditional databases integrate with AI services
+- Explain the importance of prompt engineering
+- Demonstrate context management in conversations
+
+### 2. Vector Search Value Proposition
+- Compare exact match vs semantic similarity
+- Show real business value of intelligent search
+- Discuss when to use vector vs traditional search
+
+### 3. Multi-Agent System Benefits
+- Explain specialization and modularity advantages
+- Show how to handle complex business workflows
+- Discuss scalability and maintainability benefits
 
 ## Preparation for Next Challenge
 
-Before moving to Challenge 03:
-- Ensure teams understand vector search concepts
-- Explain how AI workloads differ from traditional queries
-- Preview how embeddings work with partition keys
-- Set expectations for Challenge 03 complexity
+Before moving to Challenge 04:
+- Ensure teams understand current cost implications
+- Preview security concepts they'll implement
+- Explain the importance of production readiness
+- Set expectations for monitoring and optimization

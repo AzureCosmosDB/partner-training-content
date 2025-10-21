@@ -1,355 +1,449 @@
-# Challenge 03 - AI-Powered Search with Vector Embeddings - Coach's Guide
+# Challenge 04 - Security & Cost Optimization - Coach's Guide
 
-**[< Previous Challenge](./Solution-02.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-04.md)**
+**[< Previous Challenge](./Solution-02.md)** - **[Home](../../README.md)**
 
 ## Solution Overview
 
-This challenge demonstrates how to build AI-powered applications using Azure Cosmos DB's vector search capabilities. Teams will explore a multi-agent banking system that combines traditional queries with AI-powered semantic search.
+This final challenge focuses on production readiness by implementing security best practices and cost optimization strategies. Teams will configure monitoring, implement security controls, and apply techniques to minimize operational costs while maintaining performance.
 
 ## Learning Objectives for Students
 
-- Understand vector embeddings and semantic similarity search
-- Learn how to combine traditional and AI-powered search patterns
-- Experience multi-agent system architectures
-- Practice with Azure OpenAI integration patterns
-- Analyze the performance characteristics of vector searches
+- Implement production-grade security controls for Cosmos DB
+- Configure comprehensive monitoring and alerting
+- Apply cost optimization strategies and measure their impact
+- Understand the balance between security, performance, and cost
+- Develop skills in operational excellence for cloud databases
 
-## Application Architecture Overview
+## Pre-Challenge Preparation for Coaches
 
-### Multi-Agent System Components
+### Cost Monitoring Setup
+- Verify Cost Management + Billing access for all subscriptions
+- Set up cost alerts at subscription or resource group level
+- Prepare cost analysis examples to show during the challenge
 
-1. **Coordinator Agent** (`coordinator_agent.prompty`)
-   - Routes conversations to appropriate specialized agents
-   - Maintains conversation context and state
-   - Handles agent transitions and handoffs
-
-2. **Customer Support Agent** (`customer_support_agent.prompty`)
-   - Handles general inquiries and account information
-   - Accesses customer data and transaction history
-   - Provides account balance and status information
-
-3. **Transactions Agent** (`transactions_agent.prompty`)
-   - Processes money transfers and transactions
-   - Validates account balances and limits
-   - Updates account records in real-time
-
-4. **Sales Agent** (`sales_agent.prompty`)
-   - Handles product inquiries and recommendations
-   - Uses vector search for banking offer recommendations
-   - Provides personalized product suggestions
-
-### Data Flow Architecture
-
-```
-User Query → Coordinator Agent → Specialized Agent → Cosmos DB + OpenAI → Response
-```
+### Security Prerequisites
+- Ensure teams have appropriate RBAC permissions for security configuration
+- Prepare examples of production security configurations
+- Have network isolation examples ready (even if not fully implemented)
 
 ## Detailed Solution Guide
 
-### Part 1: Application Startup and Testing
+### Part 1: Monitoring and Performance Analysis
 
-#### Backend Service Startup
+#### Setting Up Comprehensive Monitoring
+
+**Enable Diagnostic Logging:**
 ```bash
-cd backend
-
-# Linux/macOS
-python -m venv .venv
-source .venv/bin/activate
-
-# Windows
-python -m venv .venv
-.venv\Scripts\activate
-
-pip install -r src/app/requirements.txt
+# Using Azure CLI
+az monitor diagnostic-settings create \
+  --resource <cosmos-db-resource-id> \
+  --name \"CosmosDBDiagnostics\" \
+  --logs '[{\"category\":\"DataPlaneRequests\",\"enabled\":true},{\"category\":\"QueryRuntimeStatistics\",\"enabled\":true},{\"category\":\"PartitionKeyStatistics\",\"enabled\":true}]' \
+  --metrics '[{\"category\":\"Requests\",\"enabled\":true}]' \
+  --workspace <log-analytics-workspace-id>
 ```
 
-**Expected Results:**
-- Virtual environment created successfully
-- All dependencies installed without errors
-- Python service ready to start
+**Key Metrics to Monitor:**
+- Request Unit consumption
+- Request latency (P50, P95, P99)
+- Throttling events (429 errors)
+- Storage consumption
+- Partition key distribution
 
-#### Frontend Application Startup
-```bash
-cd frontend
-npm install
-ng serve --proxy-config proxy.conf.json
-```
+#### Creating Test Workload
 
-**Expected Results:**
-- Angular application builds successfully
-- Frontend accessible at `http://localhost:4200`
-- Proxy configuration routes API calls to backend
-
-### Part 2: Agent Coordination Testing
-
-#### Money Transfer Scenario
-**User Input:** \"I want to transfer money\"
-**Expected Flow:**
-1. Coordinator Agent receives request
-2. Identifies transaction intent
-3. Routes to Transactions Agent
-4. Transactions Agent requests transfer details
-5. User provides: \"500 from Acc001 to Acc003\"
-6. Agent validates accounts and balances
-7. Executes transfer and updates Cosmos DB
-8. Confirms transaction completion
-
-**Technical Implementation:**
-```python
-# Example transaction processing logic
-def process_transfer(from_account, to_account, amount):
-    # Validate accounts exist and have sufficient balance
-    # Update account balances atomically
-    # Record transaction history
-    # Return confirmation details
-```
-
-**Validation Steps for Teams:**
-1. Check conversation flow in browser
-2. Verify agent handoff occurs correctly
-3. Confirm transaction is recorded in Cosmos DB
-4. Validate account balances are updated
-
-### Part 3: Vector Search Testing
-
-#### Banking Offers Scenario
-**User Input:** \"Tell me about your banking offers\"
-**Expected Flow:**
-1. Coordinator Agent identifies product inquiry
-2. Routes to Sales Agent
-3. Sales Agent performs vector search on offers
-4. Returns relevant banking products
-5. User refines with \"credit card\"
-6. Agent provides specific credit card offers
-
-**Vector Search Implementation:**
-```python
-# Example vector search logic
-def search_offers(query_text, similarity_threshold=0.7):
-    # Generate embedding for user query
-    embedding = openai_client.embeddings.create(
-        input=query_text,
-        model=\"text-embedding-3-small\"
-    )
-    
-    # Perform vector search in Cosmos DB
-    results = cosmos_client.query_items(
-        query=\"SELECT * FROM c WHERE VectorDistance(c.embedding, @embedding) > @threshold\",
-        parameters=[
-            {\"name\": \"@embedding\", \"value\": embedding.data[0].embedding},
-            {\"name\": \"@threshold\", \"value\": similarity_threshold}
-        ]
-    )
-    return results
-```
-
-### Part 4: API Testing with Swagger
-
-#### Direct API Testing
-**Swagger URL:** `http://localhost:63280/docs`
-
-**Sample Test Flow:**
-1. **Create Session:**
-   ```json
-   POST /api/sessions
-   {
-     \"tenantId\": \"Contoso\",
-     \"userId\": \"Mark\"
-   }
-   ```
-
-2. **Send Message:**
-   ```json
-   POST /api/completions
-   {
-     \"tenantId\": \"Contoso\",
-     \"userId\": \"Mark\",
-     \"sessionId\": \"<session-id>\",
-     \"message\": \"Hello there!\"
-   }
-   ```
-
-**Expected Response Structure:**
+**Sample Transaction Schema:**
 ```json
-[
-  {
-    \"id\": \"<message-id>\",
-    \"type\": \"ai_response\",
-    \"sessionId\": \"<session-id>\",
-    \"sender\": \"User\",
-    \"text\": \"Hello there!\",
-    \"tokensUsed\": 0
-  },
-  {
-    \"id\": \"<response-id>\",
-    \"type\": \"ai_response\",
-    \"sessionId\": \"<session-id>\",
-    \"sender\": \"Coordinator\",
-    \"text\": \"Hi there! Welcome to our bank...\",
-    \"tokensUsed\": 265
+{
+  \"transactionId\": \"TX123456789\",
+  \"customerId\": \"CUST001\",
+  \"accountId\": \"ACC987654321\",
+  \"amount\": 250.75,
+  \"timestamp\": \"2024-06-01T10:15:00Z\",
+  \"merchant\": \"Amazon\",
+  \"category\": \"Shopping\",
+  \"location\": {
+    \"city\": \"Seattle\",
+    \"country\": \"USA\"
   }
-]
+}
 ```
+
+**Expected RU Consumption by Query Type:**
+
+| Query Type | Example | Expected RUs | Notes |
+|------------|---------|--------------|-------|
+| Point Read | SELECT * FROM c WHERE c.id=\"TX123\" AND c.customerId=\"CUST001\" | 1-2 RUs | Most efficient |
+| Customer Transactions | SELECT * FROM c WHERE c.customerId=\"CUST001\" | 3-8 RUs | Within partition |
+| Account Transactions | SELECT * FROM c WHERE c.accountId=\"ACC987\" | 10-25 RUs | Cross-partition |
+| Category Analysis | SELECT * FROM c WHERE c.category=\"Shopping\" | 15-40 RUs | Cross-partition |
+| Aggregation | SELECT COUNT(1) FROM c WHERE c.category=\"Shopping\" | 20-60 RUs | Most expensive |
+
+### Part 2: Autoscale Configuration and Testing
+
+#### Switching to Autoscale
+
+**Portal Method:**
+1. Navigate to container's \"Scale & Settings\"
+2. Select \"Autoscale\" radio button
+3. Set maximum RU/s (recommended: 4000 for testing)
+4. Save configuration
+
+**CLI Method:**
+```bash
+az cosmosdb sql container throughput update \
+  --account-name <account-name> \
+  --database-name <database-name> \
+  --name <container-name> \
+  --resource-group <resource-group> \
+  --max-throughput 4000
+```
+
+#### Simulating Variable Workload
+
+**Load Testing Script Example:**
+```python
+import asyncio
+import aiohttp
+import json
+from datetime import datetime, timedelta
+
+async def generate_load():
+    # Create high-frequency insert operations
+    for i in range(1000):
+        transaction = {
+            \"id\": f\"TX{i:06d}\",
+            \"customerId\": f\"CUST{i % 100:03d}\",
+            \"amount\": 100 + (i % 500),
+            \"timestamp\": datetime.utcnow().isoformat(),
+            \"category\": [\"Shopping\", \"Food\", \"Transport\"][i % 3]
+        }
+        # Insert via Cosmos DB SDK
+        await container.create_item(transaction)
+```
+
+**Expected Autoscale Behavior:**
+- Starts at 400 RU/s (10% of max)
+- Scales up when consumption approaches current limit
+- Scales down after 1 hour of low usage
+- Scale-up: immediate, Scale-down: gradual
+
+### Part 3: Security Implementation
+
+#### RBAC Configuration
+
+**Built-in Roles for Cosmos DB:**
+
+| Role | Permissions | Use Case |
+|------|-------------|----------|
+| Cosmos DB Operator | Account management, no data access | Operations team |
+| Cosmos DB Built-in Data Reader | Read data only | Reporting applications |
+| Cosmos DB Built-in Data Contributor | Read/write data | Application services |
+| DocumentDB Account Contributor | Legacy role | Not recommended |
+
+**Implementation Example:**
+```bash
+# Assign data contributor role to managed identity
+az role assignment create \
+  --assignee <managed-identity-principal-id> \
+  --role \"Cosmos DB Built-in Data Contributor\" \
+  --scope <cosmos-db-resource-id>
+
+# Assign reader role to reporting service
+az role assignment create \
+  --assignee <service-principal-id> \
+  --role \"Cosmos DB Built-in Data Reader\" \
+  --scope <cosmos-db-resource-id>
+```
+
+#### Network Security Configuration
+
+**Firewall Rules:**
+```bash
+# Add specific IP addresses
+az cosmosdb update \
+  --name <account-name> \
+  --resource-group <resource-group> \
+  --ip-range-filter \"40.76.54.131,52.176.6.30,52.169.50.45\"
+```
+
+**Virtual Network Service Endpoints:**
+```bash
+# Enable service endpoint (requires VNet)
+az cosmosdb update \
+  --name <account-name> \
+  --resource-group <resource-group> \
+  --enable-virtual-network true \
+  --virtual-network-rules \"/subscriptions/<sub-id>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>\"
+```
+
+#### Encryption Configuration
+
+**Verify Encryption at Rest:**
+- Default: Microsoft-managed keys
+- Advanced: Customer-managed keys (CMK)
+- Always enabled, no additional configuration required
+
+**Encryption in Transit:**
+- All connections use TLS 1.2+
+- Enforced by default, cannot be disabled
+
+### Part 4: Alerting and Cost Management
+
+#### Creating RU Consumption Alerts
+
+**High RU Alert Configuration:**
+```bash
+az monitor metrics alert create \
+  --name \"HighRUConsumption\" \
+  --resource-group <resource-group> \
+  --scopes <cosmos-db-resource-id> \
+  --condition \"avg 'Total Request Units' > 3000\" \
+  --window-size 5m \
+  --evaluation-frequency 1m \
+  --severity 2 \
+  --description \"RU consumption exceeded threshold\"
+```
+
+**Throttling Alert Configuration:**
+```bash
+az monitor metrics alert create \
+  --name \"CosmosDBThrottling\" \
+  --resource-group <resource-group> \
+  --scopes <cosmos-db-resource-id> \
+  --condition \"total 'Throttled Requests' > 10\" \
+  --window-size 5m \
+  --evaluation-frequency 1m \
+  --severity 1 \
+  --description \"Requests are being throttled\"
+```
+
+#### Cost Optimization Strategies
+
+**1. Indexing Policy Optimization:**
+
+**Before (Default):**
+```json
+{
+  \"indexingMode\": \"consistent\",
+  \"automatic\": true,
+  \"includedPaths\": [{\"path\": \"/*\"}],
+  \"excludedPaths\": [{\"path\": \"/\\\"_etag\\\"/?\\}]
+}
+```
+
+**After (Optimized):**
+```json
+{
+  \"indexingMode\": \"consistent\",
+  \"automatic\": true,
+  \"includedPaths\": [
+    {\"path\": \"/customerId/?\\},
+    {\"path\": \"/accountId/?\\},
+    {\"path\": \"/category/?\\},
+    {\"path\": \"/timestamp/?\\}
+  ],
+  \"excludedPaths\": [
+    {\"path\": \"/*\"},
+    {\"path\": \"/description/?\\},
+    {\"path\": \"/metadata/*\"}
+  ]
+}
+```
+
+**Expected Impact:** 10-30% reduction in write RU consumption
+
+**2. TTL Configuration:**
+
+```bash
+# Enable TTL on container (Portal or SDK)
+# Set default TTL: 86400 seconds (24 hours) for logs
+# Set TTL: -1 for permanent data
+# Item-level TTL: Set ttl property on specific documents
+```
+
+**Expected Impact:** Automatic storage cost reduction, improved query performance
+
+**3. Query Optimization:**
+
+**Poor Query:**
+```sql
+SELECT * FROM c WHERE c.category = \"Shopping\"
+-- Cross-partition, retrieves all fields
+```
+
+**Optimized Query:**
+```sql
+SELECT c.id, c.amount, c.timestamp 
+FROM c 
+WHERE c.customerId = \"CUST001\" AND c.category = \"Shopping\"
+-- Includes partition key, selective fields
+```
+
+**Expected Impact:** 50-80% RU reduction
+
+### Part 5: Advanced Security and Cost Analysis
+
+#### Security Assessment Checklist
+
+**Authentication & Authorization:**
+- [ ] RBAC roles properly assigned
+- [ ] No shared keys in application code
+- [ ] Managed identity configured
+- [ ] Principle of least privilege applied
+
+**Network Security:**
+- [ ] Firewall rules configured
+- [ ] Private endpoints evaluated
+- [ ] VNet integration considered
+- [ ] Public access reviewed
+
+**Data Protection:**
+- [ ] Encryption at rest verified
+- [ ] Encryption in transit enforced
+- [ ] Key management strategy defined
+- [ ] Backup encryption confirmed
+
+**Monitoring & Compliance:**
+- [ ] Audit logging enabled
+- [ ] Security alerts configured
+- [ ] Compliance requirements mapped
+- [ ] Incident response procedures defined
+
+#### Cost Optimization Report Template
+
+**Current State Analysis:**
+- Baseline RU consumption patterns
+- Storage growth trends
+- Query performance metrics
+- Autoscale behavior analysis
+
+**Optimization Opportunities:**
+- Indexing policy improvements
+- Query optimization potential
+- TTL implementation benefits
+- Throughput model comparison
+
+**Implementation Recommendations:**
+- Priority ranking of optimizations
+- Expected cost savings
+- Implementation effort estimates
+- Risk assessment
 
 ## Common Coaching Challenges
 
-### 1. Vector Search Concept Confusion
-**Problem:** Teams don't understand how semantic similarity works
+### 1. Teams Overwhelmed by Security Options
+**Problem:** Too many security features to understand
 **Solutions:**
-- Use concrete examples: \"credit card\" vs \"rewards program\"
-- Show embedding visualization tools
-- Explain cosine similarity in simple terms
-- Demonstrate with similar vs dissimilar queries
+- Focus on top 3-4 most impactful features
+- Use real-world security scenarios
+- Explain compliance requirements context
+- Prioritize based on business needs
 
-### 2. Agent Handoff Not Working
-**Problem:** Coordinator doesn't route to correct agents
+### 2. Difficulty Seeing Cost Impact
+**Problem:** Changes don't show immediate cost differences
 **Solutions:**
-- Check agent prompt templates for clarity
-- Verify Azure OpenAI model is responding correctly
-- Look at conversation logs in Debug container
-- Ensure proper context is maintained
+- Use Azure Pricing Calculator for projections
+- Show RU consumption differences immediately
+- Explain monthly cost implications
+- Use hypothetical scaling scenarios
 
-### 3. High RU Consumption
-**Problem:** Vector searches consume many RUs
+### 3. Autoscale Not Triggering
+**Problem:** Load isn't sufficient to trigger autoscaling
 **Solutions:**
-- Explain that vector searches are computationally expensive
-- Show RU monitoring in Azure portal
-- Discuss optimization strategies (caching, indexing)
-- Compare with traditional query costs
+- Create more intensive load patterns
+- Use bulk operations for higher RU consumption
+- Show autoscale metrics in portal
+- Explain how autoscale thresholds work
 
-### 4. Application Startup Issues
-**Problem:** Frontend or backend won't start
+### 4. RBAC Permission Issues
+**Problem:** Teams can't assign roles or access resources
 **Solutions:**
-- Check Node.js and Python versions
-- Verify port availability (4200, 63280)
-- Review dependency installation logs
-- Ensure Azure services are running
+- Verify account permissions before challenge
+- Use resource group level permissions when possible
+- Have coaches pre-assign roles if needed
+- Explain permission inheritance
 
-## Performance Analysis Guide
+## Performance Benchmarks
 
-### RU Consumption Patterns
+### Expected Throughput Scaling
 
-**Traditional Queries:**
-- Point reads: 1-3 RUs
-- Range queries: 3-10 RUs
-- Cross-partition queries: 10-50 RUs
+| Scenario | Manual (400 RU/s) | Autoscale (400-4000 RU/s) | Performance Impact |
+|----------|-------------------|---------------------------|-------------------|
+| Steady load | No throttling | Efficient scaling | Similar performance |
+| Burst load | Heavy throttling | Immediate scaling | 10x better performance |
+| Variable load | Over-provisioned | Cost-optimized | 30-50% cost savings |
 
-**Vector Searches:**
-- Simple vector query: 15-30 RUs
-- Vector query with filters: 20-40 RUs
-- Hybrid search (vector + text): 25-50 RUs
+### Cost Comparison Models
 
-### Token Usage Monitoring
+**Manual Throughput:**
+- Predictable costs
+- Risk of throttling during peaks
+- Over-provisioning during quiet periods
 
-**Typical Token Consumption:**
-- Simple queries: 50-200 tokens
-- Complex conversations: 300-800 tokens
-- Vector search with context: 200-500 tokens
-
-**Coaching Points:**
-- Show token usage in API responses
-- Explain cost implications of token consumption
-- Discuss optimization strategies
-
-## Advanced Coaching Topics
-
-### 1. Multi-Agent Architecture Patterns
-- Explain agent specialization benefits
-- Show how to design agent boundaries
-- Discuss conversation state management
-- Demonstrate error handling and recovery
-
-### 2. Vector Search Optimization
-- Explain embedding model selection
-- Discuss similarity threshold tuning
-- Show hybrid search implementation
-- Cover vector index optimization
-
-### 3. Real-World Scaling Considerations
-- Discuss conversation state partitioning
-- Explain agent load balancing
-- Cover multi-tenant isolation
-- Address security and compliance
-
-## Troubleshooting Guide
-
-### Application Issues
-```bash
-# Check backend service
-curl http://localhost:63280/health
-
-# Check frontend build
-ng build --configuration development
-
-# Review application logs
-docker logs <container-name>
-```
-
-### Azure Service Issues
-```bash
-# Check OpenAI deployment status
-az cognitiveservices account deployment list
-
-# Check Cosmos DB connectivity
-az cosmosdb sql database list
-
-# Monitor RU consumption
-# Use Azure portal Insights section
-```
-
-### Vector Search Issues
-```python
-# Test embedding generation
-from openai import AzureOpenAI
-client = AzureOpenAI(...)
-response = client.embeddings.create(
-    input=\"test query\",
-    model=\"text-embedding-3-small\"
-)
-print(response.data[0].embedding[:5])  # First 5 dimensions
-```
+**Autoscale Throughput:**
+- Variable costs based on usage
+- No throttling risk
+- Optimal provisioning
 
 ## Time Management
 
 - **Total Duration:** 90-120 minutes
-- **Application Setup:** 20 minutes
-- **Basic Testing:** 30 minutes
-- **Vector Search Exploration:** 40 minutes
-- **API Testing:** 20 minutes
-- **Analysis and Discussion:** 10 minutes
+- **Monitoring Setup:** 20 minutes
+- **Autoscale Testing:** 25 minutes
+- **Security Configuration:** 30 minutes
+- **Cost Optimization:** 25 minutes
+- **Analysis and Reporting:** 20 minutes
 
 ## Success Validation
 
 Teams successfully complete when they can:
-1. ✅ Start both frontend and backend applications
-2. ✅ Demonstrate successful money transfer with agent coordination
-3. ✅ Show vector search working for banking offers
-4. ✅ Use Swagger API to test endpoints directly
-5. ✅ Explain the difference between traditional and vector searches
-6. ✅ Monitor and understand RU consumption patterns
-7. ✅ Articulate how agent coordination works
+1. ✅ Configure monitoring and demonstrate RU consumption tracking
+2. ✅ Successfully switch to autoscale and show scaling behavior
+3. ✅ Implement RBAC security controls appropriately
+4. ✅ Create and test monitoring alerts
+5. ✅ Apply indexing optimizations and measure impact
+6. ✅ Configure TTL and understand storage implications
+7. ✅ Produce a cost optimization report with recommendations
+8. ✅ Explain security and cost trade-offs for production environments
 
 ## Key Teaching Moments
 
-### 1. AI Integration Patterns
-- Show how traditional databases integrate with AI services
-- Explain the importance of prompt engineering
-- Demonstrate context management in conversations
+### 1. Production Readiness Mindset
+- Security is not optional in production
+- Monitoring enables proactive operations
+- Cost optimization is an ongoing process
+- Balance between security, performance, and cost
 
-### 2. Vector Search Value Proposition
-- Compare exact match vs semantic similarity
-- Show real business value of intelligent search
-- Discuss when to use vector vs traditional search
+### 2. Operational Excellence
+- Automation reduces human error
+- Alerts enable quick response to issues
+- Documentation enables team scaling
+- Regular review prevents cost drift
 
-### 3. Multi-Agent System Benefits
-- Explain specialization and modularity advantages
-- Show how to handle complex business workflows
-- Discuss scalability and maintainability benefits
+### 3. Business Value Connection
+- Show how technical decisions impact business outcomes
+- Explain cost implications in business terms
+- Connect security to risk management
+- Demonstrate operational efficiency benefits
 
-## Preparation for Next Challenge
+## Final Hack Wrap-up
 
-Before moving to Challenge 04:
-- Ensure teams understand current cost implications
-- Preview security concepts they'll implement
-- Explain the importance of production readiness
-- Set expectations for monitoring and optimization
+### Key Learnings Summary
+1. **Data Modeling:** Query-driven design principles
+2. **Performance:** Partition key and indexing impact
+3. **AI Integration:** Vector search and multi-agent patterns
+4. **Security:** Multi-layered protection strategies
+5. **Cost Management:** Optimization techniques and monitoring
+
+### Next Steps for Teams
+- Apply learnings to real projects
+- Continue exploring advanced Cosmos DB features
+- Build production-ready applications
+- Share knowledge with broader teams
+
+### Additional Resources
+- Azure Architecture Center patterns
+- Cosmos DB best practices documentation
+- Security benchmarks and compliance guides
+- Cost optimization playbooks
