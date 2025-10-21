@@ -1,6 +1,6 @@
-# Challenge 02 - Data Modeling & Query Optimization - Coach's Guide
+# Challenge 01 - Data Modeling & Query Optimization - Coach's Guide
 
-**[< Previous Challenge](./Solution-00a.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-02.md)**
+**[< Previous Challenge](./Solution-00.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-02.md)**
 
 ## Solution Overview
 

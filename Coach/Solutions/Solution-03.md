@@ -1,4 +1,4 @@
-# Challenge 04 - Security & Cost Optimization - Coach's Guide
+# Challenge 03 - Security & Cost Optimization - Coach's Guide
 
 **[< Previous Challenge](./Solution-02.md)** - **[Home](../../README.md)**
 

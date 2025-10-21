@@ -1,6 +1,6 @@
 # Challenge 00 - Prerequisites - Coach's Guide
 
-**[Home](../../README.md)** - **[Next Challenge >](./Solution-00a.md)**
+**[Home](../../README.md)** - **[Next Challenge >](./Solution-01.md)**
 
 ## Solution Overview
 

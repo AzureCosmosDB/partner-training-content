@@ -1,4 +1,4 @@
-# Challenge 03 - AI-Powered Search with Vector Embeddings - Coach's Guide
+# Challenge 02 - AI-Powered Search with Vector Embeddings - Coach's Guide
 
 **[< Previous Challenge](./Solution-01.md)** - **[Home](../../README.md)** - **[Next Challenge >](./Solution-03.md)**
 
