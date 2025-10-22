@@ -39,7 +39,7 @@ To complete this challenge successfully, you should:
 - **Performance Monitoring:**
   - Monitor RU consumption during vector search operations
   - Compare RU costs between simple queries and vector similarity searches
-  - Analyze query execution times for different search patterns
+  - Analyze query execution times for different search patterns (example: )
 
 ## Learning Resources
 
@@ -57,7 +57,7 @@ To complete this challenge successfully, you should:
 - Vector searches typically consume more RUs than simple queries - monitor this in the portal
 - Each agent has specialized prompts that determine their behavior and capabilities
 
-## Advanced Challenges (Optional)
+## Advanced Challenges (Optional, time permitting)
 
 - **Custom Vector Search:** Implement your own vector search functionality for a new type of banking product
 - **Search Optimization:** Experiment with different similarity thresholds and measure their impact on search relevance
