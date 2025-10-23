@@ -16,10 +16,6 @@ The goal is to understand the trade-offs between different partition key strateg
 
 You can find sample data documents in the `Challenge01/` folder of the under the `/Student/Resources` folder. 
 
-## Success Criteria
-
-To complete this challenge successfully, you should:
-
 ### Part 1: Container Design Experiments
 
 - **Experiment A: Customers & Sales Orders Container**
@@ -70,6 +66,10 @@ To complete this challenge successfully, you should:
   - How did indexing changes affect performance and cost?
   - What anti-patterns did you observe (hot partitions, expensive cross-partition queries)?
   - What denormalization or data embedding strategies would you recommend?
+
+## Success Criteria
+
+To complete this challenge successfully, you should have:
 
 ## Learning Resources
 
