@@ -101,7 +101,7 @@ For parts of this hack we will be relying heavily on GitHub Copilot for coding. 
 
 </details>
 
-### Setup Banking Application
+### Setup the Banking Application
 You need to deploy a multi-agent banking application that uses Azure Cosmos DB as its data foundation. This application demonstrates real-world patterns for using Cosmos DB with AI services.
 
 The deployment will create:
