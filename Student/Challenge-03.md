@@ -14,10 +14,6 @@ You'll work with a `RetailBankingDB` database containing transaction data to und
 
 This challenge simulates real-world scenarios where you need to balance performance, security, and cost while maintaining a great user experience.
 
-## Success Criteria
-
-To complete this challenge successfully, you should demonstrate your understanding of Cosmos DB monitoring, autoscale, and security by completing the following tasks:
-
 ### Part 1: Environment Setup and Data Loading
 
 - **Create the RetailBankingDB Database and Transactions Container:**
@@ -169,6 +165,17 @@ Using your tool of choice:
     - Capacity planning for growth
     - Performance testing methodologies
   - Document best practices for minimizing RU consumption in banking applications
+
+## Success Criteria
+
+To complete this challenge successfully, you should demonstrate your understanding of Cosmos DB monitoring, autoscale, and security:
+
+- Successfully create the `RetailBankingDB` database and `Transactions` container, load at least 1000 sample transaction documents with varied data
+- Execute single-partition, potentially cross-partition, and cross-partition queries, recording RU charges, latency, and throttling metrics for each
+- Enable diagnostic logging and monitoring, configure autoscale throughput (max 4000 RU/s), and successfully simulate workload scenarios that demonstrate autoscaling behavior
+- (Optional) Configure RBAC roles, network security (firewall rules, private endpoint documentation), and document data protection mechanisms including encryption at rest and in transit
+- Set up monitoring alerts for RU consumption spikes with proper action groups and implement cost optimization through indexing policy changes, TTL configuration, and query optimization
+- Perform cost analysis comparing manual vs autoscale throughput strategies and document security features with a compliance-focused checklist for production banking environments
 
 ## Learning Resources
 

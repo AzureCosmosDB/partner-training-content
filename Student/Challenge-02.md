@@ -20,10 +20,6 @@ The agents are designed to:
 - Perform vector searches on banking offers and product information
 - Execute transactions while maintaining conversational context
 
-## Success Criteria
-
-To complete this challenge successfully, you should:
-
 ### Analyze and Understand the AI Architecture
 
 - **Vector Search Analysis:**
@@ -39,7 +35,16 @@ To complete this challenge successfully, you should:
 - **Performance Monitoring:**
   - Monitor RU consumption during vector search operations
   - Compare RU costs between simple queries and vector similarity searches
-  - Analyze query execution times for different search patterns (example: )
+  - Analyze query execution times for different search patterns
+
+## Success Criteria
+
+To complete this challenge successfully, you should:
+
+- Identify and document which Cosmos DB containers store vector embeddings and explain how they are used for semantic search
+- Document the agent coordination flow, explaining how queries are routed between specialized agents and how conversation context is maintained
+- Monitor and record RU consumption for vector search operations compared to simple queries
+- Analyze and compare query execution times across different search patterns (exact text matching vs. semantic similarity)
 
 ## Learning Resources
 

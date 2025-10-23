@@ -16,10 +16,6 @@ The goal is to understand the trade-offs between different partition key strateg
 
 You can find sample data documents in the `Challenge01/` folder of the under the `/Student/Resources` folder. 
 
-## Success Criteria
-
-To complete this challenge successfully, you should:
-
 ### Part 1: Container Design Experiments
 
 - **Experiment A: Customers & Sales Orders Container**
@@ -70,6 +66,16 @@ To complete this challenge successfully, you should:
   - How did indexing changes affect performance and cost?
   - What anti-patterns did you observe (hot partitions, expensive cross-partition queries)?
   - What denormalization or data embedding strategies would you recommend?
+
+## Success Criteria
+
+To complete this challenge successfully, you should:
+
+- Successfully create and test all three container designs with different partition keys, documenting RU consumption and latency differences
+- Modify indexing policies and measure their impact on query performance and cost
+- Execute and document at least one example of each query pattern type (point read, range query, cross-partition query, and aggregation)
+- Provide a comprehensive analysis comparing partition key strategies, explaining which approach works best for different query patterns
+- Identify performance anti-patterns and recommend denormalization or data embedding strategies based on your experimental results
 
 ## Learning Resources
 
