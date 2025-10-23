@@ -1,8 +1,8 @@
-# What The Hack - Azure Cosmos DB for AI & Modern Applications
+# Azure Cosmos DB for AI & Modern Applications training
 
 ## Introduction
 
-Welcome to the Azure Cosmos DB for AI & Modern Applications What The Hack! This is a challenge-based learning experience designed to teach you how to build scalable, high-performance, and cost-optimized applications using Azure Cosmos DB. Through hands-on challenges, you'll explore data modeling, full-text and vector search, AI agent development, security, and cost optimization strategies.
+Welcome to Azure Cosmos DB for AI & Modern Applications training! This is a challenge-based learning experience designed to teach you how to build scalable, high-performance, and cost-optimized applications using Azure Cosmos DB. Through hands-on challenges, you'll explore data modeling, full-text and vector search, AI agent development, security, and cost optimization strategies.
 
 This hack blends technical deep dives with practical exercises covering real-world scenarios where Azure Cosmos DB shines - from IoT applications to AI-powered systems. You'll also explore the latest innovations in Cosmos DB, including its integration with AI services and modern application patterns.
 
@@ -30,8 +30,8 @@ This hack has the following challenges:
    - Design partitioned data models, write efficient queries, and analyze performance
 - Challenge 02: **[AI-Powered Search with Vector Embeddings](Student/Challenge-02.md)**
    - Build AI agents with full-text, vector, and hybrid search capabilities
-- Challenge 03: **[Security & Cost Optimization](Student/Challenge-03.md)**
-   - Implement security best practices and cost-saving strategies
+- Challenge 03: **[Monitoring, Autoscale, and Security in Azure Cosmos DB](Student/Challenge-03.md)**
+   - Implement monitoring, autoscale, and security in Azure Cosmos DB
 
 ## Prerequisites
 

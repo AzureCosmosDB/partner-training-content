@@ -1,105 +1,174 @@
-# Challenge 03 - Security & Cost Optimization
+# Challenge 03 - Monitoring, Autoscale, and Security in Azure Cosmos DB
 
 **[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)**
 
 ## Introduction
 
-Running Azure Cosmos DB in production requires careful attention to both security and cost optimization. In this final challenge, you'll implement security best practices, configure monitoring and alerting, and apply cost optimization techniques to ensure your Cosmos DB deployment is both secure and cost-effective.
+In this challenge, you'll monitor Request Unit (RU) usage, switch to autoscale throughput, simulate workloads, and apply security best practices in Azure Cosmos DB.
 
 Security in the cloud is a shared responsibility, and Cosmos DB provides multiple layers of protection. Cost optimization requires understanding how different configuration choices impact your monthly bill and implementing strategies to minimize unnecessary spending.
 
 ## Description
 
-Using your existing banking application infrastructure, you'll enhance it with production-ready security controls and implement cost optimization strategies. You'll configure monitoring, set up alerts, test different throughput models, and apply security best practices.
+You'll work with a `RetailBankingDB` database containing transaction data to understand real-world performance and cost optimization scenarios. Using your existing banking application infrastructure, you'll enhance it with production-ready security controls and implement cost optimization strategies.
 
 This challenge simulates real-world scenarios where you need to balance performance, security, and cost while maintaining a great user experience.
 
 ## Success Criteria
 
-To complete this challenge successfully, you should:
+To complete this challenge successfully, you should demonstrate your understanding of Cosmos DB monitoring, autoscale, and security by completing the following tasks:
 
-### Part 1: Monitoring and Performance Analysis
+### Part 1: Environment Setup and Data Loading
+
+- **Create the RetailBankingDB Database and Transactions Container:**
+  - Create a new Cosmos DB Account. Choose a unique name and region. 
+  - Select “Provisioned throughput” and enable “Azure Cosmos DB for NoSQL API”
+  - Create a new database called `RetailBankingDB` 
+  - Create a container named `Transactions` with the partition key `/customerId`
+  - Set initial throughput to manual mode with 400 RU/s 
+
+- **Load Sample Transaction Data:**
+  - Insert at least 1000 sample transaction documents using this schema:
+    ```json
+    {
+      "transactionId": "TX123456789",
+      "customerId": "CUST001", 
+      "accountId": "ACC987654321",
+      "amount": 250.75,
+      "timestamp": "2024-06-01T10:15:00Z",
+      "merchant": "Amazon",
+      "category": "Shopping"
+    }
+    ```
+  - Ensure variety in `customerId`, `accountId`, and `category` values for realistic testing
+  - Use Data Explorer, SDKs, or bulk insert tools for efficiency
+
+### Part 2: Query Analysis and RU Monitoring
+
+- **Execute Queries:**
+Using your tool of choice:
+  - Run queries to retrieve transactions by customer ID (single partition)
+  ```sql
+  SELECT * FROM c WHERE c.customerId = "CUST001"
+  ```
+  - Run queries to retrieve transactions by account ID (potentially cross-partition)
+  ```sql
+  SELECT * FROM c WHERE c.accountId = "ACC987654321"
+  ```
+  - Run queries to retrieve transactions by category (cross-partition)
+  ```sql
+  SELECT * FROM c WHERE c.category = "Shopping"
+  ```
+
+- **Record Performance Metrics:**
+  - For each query, note:
+    - RU charge (from Query Metrics in Data Explorer)
+    - Query latency in milliseconds
+    - Any throttling events 
 
 - **Enable Comprehensive Monitoring:**
-  - Navigate to your Cosmos DB account's \"Insights\" section
-  - Enable diagnostic logging and send logs to Log Analytics
-  - Monitor RU consumption, latency, and throttling events
+  - Navigate to your Cosmos DB account's "Monitoring" section
+  - Under Diagnostic settings, enable diagnostic logging and send logs to a Log Analytics workspace
+  - Monitor RU consumption, latency, and throttling graphs
+  - Write sample KQL queries to analyze RU usage over time
 
-- **Create Test Workload and Measure Performance:**
-  - Create a new container named `TransactionTest` with `/customerId` as partition key
-  - Set initial throughput to 400 RU/s (manual mode)
-  - Insert 1000+ sample transaction documents using the provided schema
-  - Run different query patterns and record RU consumption:
-    - Point read by transaction ID
-    - Range query by customer ID
-    - Cross-partition query by transaction category
-    - Aggregation query (count transactions by category)
+### Part 3: Autoscale Configuration and Workload Simulation
 
-### Part 2: Autoscale Configuration and Testing
+- **Switch to Autoscale Throughput:**
+  - Navigate to "Scale & Settings" in your Transactions container
+  - Change from manual to autoscale mode
+  - Set maximum RU/s to 4000 (starting minimum will be 400 RU/s)
 
-- **Switch to Autoscale:**
-  - Change your container's throughput from manual to autoscale
-  - Set maximum RU/s to 4000
-  - Document the configuration change process
+- **Simulate Variable Banking Workloads:**
+  - Create scripts or use Data Explorer to simulate high-load scenarios:
+    - Batch transaction inserts
+    - Concurrent customer queries 
+  - Monitor autoscaling behavior in the Insights dashboard to watch the RU/s usage graph
+  - Record how RU/s adjusts automatically and timing of scaling events
 
-- **Simulate Variable Workload:**
-  - Create a script or use Data Explorer to simulate high-load scenarios
-  - Run batch inserts and concurrent queries to trigger autoscaling
-  - Monitor how RU/s adjusts automatically in the Insights dashboard
-  - Record the scaling behavior and timing
-
-- **Cost Analysis:**
-  - Use the Azure Cosmos DB Capacity Calculator to estimate costs
-  - Compare estimated monthly costs for manual vs autoscale configurations
-  - Document scenarios where each approach would be more cost-effective
-
-### Part 3: Security Implementation
+### Part 4: Enterprise Security Implementation (optional)
 
 - **Configure Role-Based Access Control (RBAC):**
-  - Navigate to \"Access control (IAM)\" in your Cosmos DB account
-  - Create or assign the following roles:
-    - \"Cosmos DB Operator\" for administrative access
-    - \"Cosmos DB Built-in Data Reader\" for read-only access
-    - \"Cosmos DB Built-in Data Contributor\" for read-write access
-  - Test access with different role assignments
+  - Navigate to "Access control (IAM)" in your Cosmos DB account
+  - Assign the following built-in role to your user or service principal
+    - "Cosmos DB Operator" 
+    - "Managed Identity Contributor"
 
-- **Network Security:**
-  - Configure firewall rules to restrict access by IP address
-  - Review private endpoint configuration options (document the process even if not implementing)
-  - Understand the difference between public and private access
+- **Network Security Configuration:**
+  - Configure firewall rules to restrict access by IP address ranges
+  - Review private endpoint configuration options:
+    - Document the process for creating a private endpoint
+    - Explain benefits for applications with sensitive data
+    - Understand VNet integration requirements
+  - Configure service endpoint policies if applicable
 
-- **Encryption and Data Protection:**
-  - Verify that encryption at rest is enabled (default setting)
-  - Review customer-managed key options in the Encryption settings
-  - Document the encryption capabilities and configuration options
+- **Data Protection and Encryption:**
+  - Verify that encryption at rest is enabled (should be the default setting)
+  - Review customer-managed key (CMK) options:
+    - Navigate to Encryption settings
+    - Document the process for configuring CMK with Azure Key Vault
+    - Explain compliance benefits for financial institutions
+  - Understand encryption in transit capabilities
 
-### Part 4: Alerting and Cost Management
+### Part 5: Alerting and Cost Management
 
-- **Configure Monitoring Alerts:**
-  - Create an alert rule for high RU consumption (threshold: > 3000 RU/s for 5 minutes)
-  - Set up notifications via email or SMS
-  - Create an alert for throttling events
-  - Test that alerts trigger properly during high-load scenarios
+- **Configure Monitoring Alerts for RU consumption spikes:**
+  - Navigate to "Alerts" under the Monitoring section
+  - Create alert rules for:
+    - High RU consumption (threshold: > 3000 RU/s for 5 minutes)
+  - Configure action groups for email/SMS notifications
+  - Test that alerts trigger properly during simulated high-load scenarios by creating a sample 200K sample JSON document, make it as Array and put it in one file so i can upload in one go, follow the structure <specify the structure 
 
 - **Implement Cost Optimization Best Practices:**
-  - Review and optimize indexing policies (exclude rarely-queried properties)
-  - Configure Time-to-Live (TTL) on appropriate containers to auto-delete old data
-  - Implement efficient query patterns that avoid cross-partition operations
-  - Document recommended query optimization techniques
+  - **Indexing Policy Optimization:**
+    - Review current indexing policy in your container
+    - Identify properties that don't need indexing (exclude from index)
+    - Configure composite indexes for common multi-property queries
+    - Test query performance before and after indexing changes
+  
+  - **Time-to-Live (TTL) Configuration:**
+    - Configure TTL on transaction documents (e.g., auto-delete after 7 years for compliance)
+    - Test TTL functionality with sample documents
+    - Calculate storage cost savings from automatic cleanup
+  
+  - **Query Optimization:**
+    - Implement efficient query patterns that include partition key
+    - Avoid SELECT * by specifying only needed fields
+    - Use pagination for large result sets
+    - Document recommended patterns for banking applications
+  
+- **Cost Analysis and Comparison:**
+  - Use the [Azure Cosmos DB Capacity Calculator](https://cosmos.azure.com/capacitycalculator/)
+  - Calculate estimated monthly costs for:
+    - Manual throughput at 400 RU/s
+    - Manual throughput at 4000 RU/s  
+    - Autoscale with max 4000 RU/s
+  - Document scenarios where each approach would be most cost-effective
+  - Consider peak vs off-peak usage patterns typical in banking
 
-### Part 5: Advanced Security and Optimization Analysis
 
-- **Security Assessment:**
+### Part 6: Advanced Security and Cost Analysis
+
+- **Security Assessment and Compliance:**
   - Document all security features currently enabled
-  - Identify additional security measures for a production environment
-  - Explain the security benefits of managed identity integration
-  - Review audit logging capabilities
+  - Create a security checklist for production banking environments:
+    - Data encryption (at rest and in transit)
+    - Network isolation and access controls
+    - Audit logging and monitoring
+    - Identity and access management
+  - Research compliance features relevant to financial services (GDPR, PCI DSS)
+  - Explain how managed identity integration enhances security
 
-- **Cost Optimization Report:**
-  - Create a report comparing different throughput strategies
-  - Analyze the cost impact of different partition key choices
-  - Document best practices for minimizing RU consumption
-  - Provide recommendations for ongoing cost management
+- **Comprehensive Cost Optimization Report:**
+  - Compare total cost of ownership for different configurations:
+    - Manual vs autoscale throughput strategies
+    - Impact of partition key choices on cross-partition queries
+    - Storage optimization through indexing and TTL
+  - Create recommendations for ongoing cost management:
+    - Regular monitoring and alerting procedures
+    - Capacity planning for growth
+    - Performance testing methodologies
+  - Document best practices for minimizing RU consumption in banking applications
 
 ## Learning Resources
 
