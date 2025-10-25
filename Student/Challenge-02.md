@@ -26,6 +26,7 @@ The agents are designed to:
   - Identify which Azure Cosmos DB containers store vector embeddings
   - Understand how product offers are vectorized and searched
   - Explain the difference between exact text matching and semantic similarity search
+  - Analyze how hybrid search combines vector and full-text search approaches for improved relevance
 
 - **Agent Coordination:**
   - Document how the coordinator agent determines which specialized agent to route queries to
@@ -45,6 +46,7 @@ To complete this challenge successfully, you should:
 - Document the agent coordination flow, explaining how queries are routed between specialized agents and how conversation context is maintained
 - Monitor and record RU consumption for vector search operations compared to simple queries
 - Analyze and compare query execution times across different search patterns (exact text matching vs. semantic similarity)
+- Demonstrate understanding of hybrid search by explaining how it combines vector and full-text search for enhanced relevance
 
 ## Learning Resources
 
@@ -66,6 +68,7 @@ To complete this challenge successfully, you should:
 
 - **Custom Vector Search:** Implement your own vector search functionality for a new type of banking product
 - **Search Optimization:** Experiment with different similarity thresholds and measure their impact on search relevance
+- **Hybrid Search Implementation:** Create a search function that combines both vector similarity and full-text search results, experimenting with different ranking and weighting strategies
 - **Multi-modal Search:** Enhance the search to combine text vectors with other data types (dates, amounts, categories)
 - **Performance Tuning:** Implement caching strategies for frequently accessed vectors to reduce RU consumption
 - **Advanced Agents:** Create a new specialized agent that handles investment or insurance products
