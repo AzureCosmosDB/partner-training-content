@@ -77,8 +77,7 @@ Using your tool of choice:
 
 - **Simulate Variable Banking Workloads:**
   - Create scripts or use Data Explorer to simulate high-load scenarios:
-    - Batch transaction inserts
-    - Concurrent customer queries 
+    - Create a sample 200K sample JSON document, make it an array, and put it in one file so it can be uploaded in one go. You can use the same schema you used in part 1. 
   - Monitor autoscaling behavior in the Insights dashboard to watch the RU/s usage graph
   - Record how RU/s adjusts automatically and timing of scaling events
 
