@@ -119,6 +119,11 @@ Log in with your Azure credentials using the Azure Developer CLI (`azd`):
    azd auth login
    ```
 
+Navigate to the infra folder:
+
+```bash
+cd Student/Resources/banking-workshop/infra
+```
 Deploy the Azure services using `azd up`:
 
    ```shell
