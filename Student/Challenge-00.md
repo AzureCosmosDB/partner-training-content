@@ -122,7 +122,7 @@ Log in with your Azure credentials using the Azure Developer CLI (`azd`):
 Navigate to the infra folder:
 
 ```bash
-cd Student/Resources/banking-workshop/infra
+cd Student/Resources/banking-workshop
 ```
 Deploy the Azure services using `azd up`:
 
