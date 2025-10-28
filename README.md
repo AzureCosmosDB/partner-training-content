@@ -1,84 +1,65 @@
-# Azure Cosmos DB Training Guide
+# Azure Cosmos DB for AI & Modern Applications training
 
-This README provides step-by-step instructions for delivering the Azure Cosmos DB training sessions and hands-on labs. The total duration of the training is approximately 6 hours and 15 minutes.
+## Introduction
 
----
+Welcome to Azure Cosmos DB for AI & Modern Applications training! This is a challenge-based learning experience designed to teach you how to build scalable, high-performance, and cost-optimized applications using Azure Cosmos DB. Through hands-on challenges, you'll explore data modeling, full-text and vector search, AI agent development, security, and cost optimization strategies.
 
-## 1. Kickoff & Azure Cosmos DB Overview (45 minutes)
+This hack blends technical deep dives with practical exercises covering real-world scenarios where Azure Cosmos DB shines - from IoT applications to AI-powered systems. You'll also explore the latest innovations in Cosmos DB, including its integration with AI services and modern application patterns.
 
-- Refer to the `./Kickoff & Overview` folder.
-- Present the slide and embed the videos mentioned in the slide.
-- Ensure the session stays within the 45-minute duration to maintain the schedule.
+## Learning Objectives
 
----
+In this hack you will learn how to:
 
-## 2. Hands-on Lab 1: Environment Setup (45 minutes)
+- Design and implement effective data models for Azure Cosmos DB
+- Understand partitioning strategies and indexing policies for optimal performance
+- Build AI-powered applications using Cosmos DB's vector search capabilities
+- Implement full-text search, vector search, and hybrid search patterns
+- Develop multi-agent systems with Azure Cosmos DB as the data foundation
+- Apply security best practices including RBAC, encryption, and private endpoints
+- Optimize costs through autoscale, TTL, and indexing tuning strategies
+- Monitor and troubleshoot Cosmos DB performance using diagnostic tools
+- Leverage the latest Cosmos DB features for modern application development
 
-- Refer to `./Lab-3/banking-workshop/lab1.md`.
-- Follow the instructions to guide participants through the environment setup.
-- Allocate 45 minutes for this lab.
+## Challenges
 
----
+This hack has the following challenges:
 
-## 3. Data Modelling & Optimization Session (90 minutes)
+- Challenge 00: **[Prerequisites - Ready, Set, GO!](Student/Challenge-00.md)**
+   - Prepare your development environment, Azure subscription, provision Cosmos DB accounts, configure basics, and validate connectivity
+- Challenge 01: **[Data Modeling & Query Optimization](Student/Challenge-01.md)**
+   - Design partitioned data models, write efficient queries, and analyze performance
+- Challenge 02: **[AI-Powered Search with Vector Embeddings](Student/Challenge-02.md)**
+   - Build AI agents with full-text, vector, and hybrid search capabilities
+- Challenge 03: **[Monitoring, Autoscale, and Security in Azure Cosmos DB](Student/Challenge-03.md)**
+   - Implement monitoring, autoscale, and security in Azure Cosmos DB
 
-- Refer to `./Modeling & Optimization/Cosmos DB Data Modeling & Optimization.pptx`.
-- Present the slide deck thoroughly.
-- This is a lengthy and insightful session that builds the foundation for Azure Cosmos DB.
-- Allocate 90 minutes for this session.
+## Prerequisites
 
----
+Before starting this hack, you should have:
 
-## 4. Hands-on Lab 2: Data Modelling & Querying (60 minutes)
+- **Technical Skills:**
+  - Basic familiarity with NoSQL databases and the Azure Portal
+  - Understanding of REST APIs and JSON
+  - Experience with at least one programming language (Python, C#, Node.js)
+  - Basic knowledge of cloud computing concepts
 
-- Refer to `./Modeling & Optimization/Modelling & Optimization lab.md`.
-- Help the audience try out the lab exercises.
-- Allocate 1 hour for this lab.
+- **Azure Requirements:**
+  - Azure subscription with **Owner** rights
+  - Access to Azure OpenAI service ([Request Access](https://aka.ms/oaiapply))
+  - Sufficient Azure OpenAI quota (30K tokens/min for GPT-4o, 5K tokens/min for text-embedding-3-small)
 
----
+## Repository Contents
 
-## 5. Developing AI Agents with Azure Cosmos DB (45 minutes)
+- `./Coach`
+  - Coach's Guide and related files
+  - `/Solutions`
+    - Solution files with completed example answers to each challenge
+- `./Student`
+  - Student's Challenge Guide
+  - `/Resources`
+    - Resource files, sample code, applications, and templates provided to students
 
-- Refer to `./Lab-3/CosmosDBForAI.pptx`.
-- Present the session with detailed insights into Cosmos DB's support for AI.
-- Allocate 45 minutes for this session.
+## Contributors
 
----
-
-## 6. Hands-on Lab 3: AI-Powered Search (45 minutes)
-
-- Refer to `./Lab-3/banking-workshop/lab3.md`.
-- Guide participants through the lab exercises.
-- Allocate 45 minutes for this lab.
-
----
-
-## 7. Security & Cost Optimisation Session (45 minutes)
-
-- Refer to `./Security/Azure CosmosDB Security.pptx`.
-- Present the session focusing on security aspects and cost optimization.
-- Allocate 45 minutes for this session.
-
----
-
-## 8. Hands-on Lab 4: Security & Cost Optimisation Techniques (45 minutes)
-
-- Refer to `./Security/SecurityHOL.md`.
-- Help participants try out the security and cost optimization techniques.
-- Allocate 45 minutes for this lab.
-
----
-
-## 9. Latest Updates in Azure Cosmos DB + Wrap-up (15 minutes)
-
-- Refer to the content available in the respective folder.
-- Present the latest updates and wrap up the training.
-- Allocate 15 minutes for this final session.
-
----
-
-## Notes
-
-- Ensure each session starts and ends on time to avoid delays.
-- Encourage participant engagement during hands-on labs.
-- Provide support and clarification as needed throughout the training.
+- Microsoft Azure Cosmos DB Team
+- Partner Training Content Team

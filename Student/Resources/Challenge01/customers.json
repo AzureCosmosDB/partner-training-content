@@ -1,0 +1,81 @@
+[
+  {
+    "id": "CUST001",
+    "customerId": "CUST001",
+    "type": "customer",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "emailAddress": "alice@example.com",
+    "addresses": [
+      {
+        "addressLine1": "123 Main St",
+        "city": "Gurgaon",
+        "country": "India"
+      }
+    ],
+    "password": { "hash": "abc", "salt": "xyz" },
+    "salesOrderCount": 2
+  },
+  {
+    "id": "CUST002",
+    "customerId": "CUST002",
+    "type": "customer",
+    "firstName": "Bob",
+    "lastName": "Johnson",
+    "emailAddress": "bob@example.com",
+    "addresses": [
+      {
+        "addressLine1": "456 Oak Ave",
+        "city": "Mumbai",
+        "country": "India"
+      }
+    ],
+    "password": { "hash": "def", "salt": "uvw" },
+    "salesOrderCount": 1
+  },
+  {
+    "id": "SO001",
+    "type": "salesOrder",
+    "customerId": "CUST001",
+    "orderDate": "2024-01-15",
+    "totalAmount": 90000,
+    "details": [
+      {
+        "sku": "ELEC-001",
+        "name": "iPhone 15",
+        "price": 90000,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "SO002",
+    "type": "salesOrder",
+    "customerId": "CUST001",
+    "orderDate": "2024-02-20",
+    "totalAmount": 25000,
+    "details": [
+      {
+        "sku": "ELEC-002",
+        "name": "iPad",
+        "price": 25000,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "SO003",
+    "type": "salesOrder",
+    "customerId": "CUST002",
+    "orderDate": "2024-01-10",
+    "totalAmount": 75000,
+    "details": [
+      {
+        "sku": "ELEC-003",
+        "name": "MacBook",
+        "price": 75000,
+        "quantity": 1
+      }
+    ]
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "id": "PROD001",
+    "categoryId": "CAT001",
+    "categoryName": "Electronics",
+    "sku": "ELEC-001",
+    "name": "iPhone 15",
+    "description": "Latest Apple smartphone with advanced features",
+    "price": 90000,
+    "tags": [
+      { "id": "TAG001", "name": "Smartphone" },
+      { "id": "TAG002", "name": "Apple" }
+    ]
+  },
+  {
+    "id": "PROD002",
+    "categoryId": "CAT001",
+    "categoryName": "Electronics",
+    "sku": "ELEC-002",
+    "name": "iPad",
+    "description": "Powerful tablet for work and entertainment",
+    "price": 25000,
+    "tags": [
+      { "id": "TAG003", "name": "Tablet" },
+      { "id": "TAG002", "name": "Apple" }
+    ]
+  },
+  {
+    "id": "PROD003",
+    "categoryId": "CAT001",
+    "categoryName": "Electronics",
+    "sku": "ELEC-003",
+    "name": "MacBook",
+    "description": "Professional laptop for creative work",
+    "price": 75000,
+    "tags": [
+      { "id": "TAG004", "name": "Laptop" },
+      { "id": "TAG002", "name": "Apple" }
+    ]
+  },
+  {
+    "id": "PROD004",
+    "categoryId": "CAT002",
+    "categoryName": "Books",
+    "sku": "BOOK-001",
+    "name": "Azure Cosmos DB Guide",
+    "description": "Comprehensive guide to Azure Cosmos DB",
+    "price": 2500,
+    "tags": [
+      { "id": "TAG005", "name": "Technology" },
+      { "id": "TAG006", "name": "Cloud" }
+    ]
+  },
+  {
+    "id": "PROD005",
+    "categoryId": "CAT002",
+    "categoryName": "Books",
+    "sku": "BOOK-002",
+    "name": "NoSQL Database Design",
+    "description": "Best practices for NoSQL database design",
+    "price": 3000,
+    "tags": [
+      { "id": "TAG005", "name": "Technology" },
+      { "id": "TAG007", "name": "Database" }
+    ]
+  }
+]

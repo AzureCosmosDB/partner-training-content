@@ -30,11 +30,11 @@ hooks:
           AZURE_OPENAI_ENDPOINT=\"$AZURE_OPENAI_ENDPOINT\"
           AZURE_OPENAI_EMBEDDINGDEPLOYMENTID=\"$AZURE_OPENAI_EMBEDDINGDEPLOYMENTID\"
           AZURE_OPENAI_COMPLETIONSDEPLOYMENTID=\"$AZURE_OPENAI_COMPLETIONSDEPLOYMENTID\"
-          " > ./python/.env
+          " > ./backend/src/app/.env
       
           echo "export const environment = {
             production: false,
-            apiUrl: 'http://localhost:63280/'
+            apiUrl: '/'
           };" > ./frontend/src/environments/environment.ts
 
       windows:
@@ -47,7 +47,7 @@ hooks:
           AZURE_OPENAI_ENDPOINT=""$env:AZURE_OPENAI_ENDPOINT""
           AZURE_OPENAI_EMBEDDINGDEPLOYMENTID=""$env:AZURE_OPENAI_EMBEDDINGDEPLOYMENTID""
           AZURE_OPENAI_COMPLETIONSDEPLOYMENTID=""$env:AZURE_OPENAI_COMPLETIONSDEPLOYMENTID""
-          " > ./python/.env
+          " > ./backend/src/app/.env
 
           echo "export const environment = {
             production: false,
