@@ -1,4 +1,4 @@
-# What The Hack - Azure Cosmos DB for AI & Modern Applications
+# Azure Cosmos DB for AI & Modern Applications
 
 ## Final Repository Structure
 
