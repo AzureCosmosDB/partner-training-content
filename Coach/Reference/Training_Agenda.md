@@ -12,7 +12,7 @@ Join us for a full-day Azure Cosmos DB Hands-on Workshop designed to equip you w
 
 | Time           | Session Title & Description |
 |----------------|----------------------------|
-| **09:30 – 10:15** | **Kickoff & Azure Cosmos DB Overview**<br>Introduction to Cosmos DB’s architecture, global distribution, multi-model APIs (SQL, MongoDB, Cassandra, Gremlin, Table), and consistency models. Use cases in real-time analytics, IoT, and AI. |
+| **09:30 – 10:15** | **Kickoff & Azure Cosmos DB Overview**<br>Introduction to Cosmos DB’s architecture, global distribution, consistency model, use cases, AI, Full Text Search & Hybrid Search. Use cases in real-time analytics, IoT, and AI. |
 | **10:15 – 11:00** | **Hands-on Lab 1: Environment Setup**<br>Provision Cosmos DB accounts, configure indexing and partitioning, install SDKs (Node.js, .NET, Python), and validate access. |
 | **11:00 – 12:30** | **Data Modelling & Optimisation**<br>Deep dive into indexing policies, partitioning strategies, schema design, and query tuning. Learn to model for access patterns and avoid common anti-patterns. |
 | **12:30 – 01:00** | **Hands-on Lab 2: Data Modelling & Querying**<br>Design partitioned data models, write SQL queries, and analyse RU consumption. Use diagnostic logs to identify performance bottlenecks. |
