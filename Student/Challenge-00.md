@@ -119,7 +119,7 @@ Log in with your Azure credentials using the Azure Developer CLI (`azd`):
    azd auth login
    ```
 
-Navigate to the infra folder:
+Navigate to the banking-workshop folder:
 
 ```bash
 cd Student/Resources/banking-workshop
