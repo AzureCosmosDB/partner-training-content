@@ -34,7 +34,7 @@ hooks:
       
           echo "export const environment = {
             production: false,
-            apiUrl: 'http://localhost:63280/'
+            apiUrl: '/'
           };" > ./frontend/src/environments/environment.ts
 
       windows:
