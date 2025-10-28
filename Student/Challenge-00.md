@@ -119,6 +119,11 @@ Log in with your Azure credentials using the Azure Developer CLI (`azd`):
    azd auth login
    ```
 
+Navigate to the banking-workshop folder:
+
+```bash
+cd Student/Resources/banking-workshop
+```
 Deploy the Azure services using `azd up`:
 
    ```shell
