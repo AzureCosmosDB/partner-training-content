@@ -101,4 +101,4 @@ To complete this challenge successfully, you should:
 - Use the Cosmos DB bulk executor to load larger datasets and observe behavior at scale
 - Set up analytical store and compare query performance for analytical workloads
 
-**[< Previous Challenge](./Challenge-01.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-03.md)**
+**[< Previous Challenge](./Challenge-00.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-02.md)**
