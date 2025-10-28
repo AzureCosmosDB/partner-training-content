@@ -80,4 +80,4 @@ To complete this challenge successfully, you should:
 - If vector searches aren't working, verify that the embedding model deployment is successful
 - Monitor Azure costs during testing as AI services can accumulate charges quickly
 
-**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-04.md)**
+**[< Previous Challenge](./Challenge-02.md)** - **[Home](../README.md)** - **[Next Challenge >](./Challenge-03.md)**
