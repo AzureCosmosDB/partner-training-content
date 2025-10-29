@@ -288,7 +288,7 @@ Teams successfully complete when they can:
 
 ## Preparation for Next Challenge
 
-Before moving to Challenge 03:
+Before moving to Challenge 02:
 - Ensure teams understand vector search concepts
 - Explain how AI workloads differ from traditional queries
 - Preview how embeddings work with partition keys

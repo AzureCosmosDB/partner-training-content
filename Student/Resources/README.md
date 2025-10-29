@@ -1,6 +1,6 @@
 # Student Resources
 
-This directory contains all the resources needed to complete the Azure Cosmos DB for AI & Modern Applications What The Hack challenges.
+This directory contains all the resources needed to complete the Azure Cosmos DB for AI & Modern Applications challenges.
 
 ## Directory Structure
 

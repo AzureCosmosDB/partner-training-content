@@ -348,7 +348,7 @@ Teams successfully complete when they can:
 
 ## Preparation for Next Challenge
 
-Before moving to Challenge 04:
+Before moving to Challenge 03:
 - Ensure teams understand current cost implications
 - Preview security concepts they'll implement
 - Explain the importance of production readiness
